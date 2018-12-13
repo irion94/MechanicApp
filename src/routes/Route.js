@@ -6,7 +6,6 @@ import OptionScreen from "../Containers/Home/OptionScreen";
 import {applicationColor} from "../Styles/UniversalStyles";
 import SearchScreen from "../Containers/Search/SearchScreen";
 import Create from "../Containers/Create/Create";
-import NewCustomer_Picker from "../Components/NewCustomer_Picker";
 import KeyboardInput from "../Containers/Create/KeyboardInput";
 
 
@@ -29,10 +28,18 @@ const HomeStack = createStackNavigator({
 );
 
 const CreateStack = createStackNavigator({
-    Create: {screen: Create},
-    KeyboardInput: {screen: KeyboardInput},
-    NewCustomer_Picker: {screen: NewCustomer_Picker}
-});
+        Create: {screen: Create},
+        KeyboardInput: {screen: KeyboardInput},
+    },
+    {
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: applicationColor.header
+            }
+        }
+
+    }
+);
 
 // const SearchStack = createStackNavigator({
 //         Search: {screen: SearchScreen},
@@ -48,7 +55,7 @@ const CreateStack = createStackNavigator({
 // );
 
 
-export default  createBottomTabNavigator({
+export default createBottomTabNavigator({
         Home: {
             screen: HomeStack,
         },
@@ -80,7 +87,7 @@ export default  createBottomTabNavigator({
                 color: applicationColor.header
             }
         }),
-        initialRouteName: 'Home',
+        initialRouteName: 'Create',
         tabBarOptions: {
             activeTintColor: applicationColor.activeTintColor,
             inactiveTintColor: 'gray',

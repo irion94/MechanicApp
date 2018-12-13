@@ -1,6 +1,6 @@
 import * as React from 'react'
 import {Image, TouchableOpacity, View} from 'react-native';
-import {Body, Card, CardItem, Left, Text} from 'native-base';
+import {Body, Card, CardItem, Container, Left, Text} from 'native-base';
 import keyboard from 'src/images/keyboard.gif'
 import scan from 'src/images/scan.gif'
 
@@ -11,22 +11,24 @@ export default class Create extends React.Component {
 
     render() {
         return (
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <CreateCard
-                    text={"Scan AZTEC code to join new customer."}
-                    note={"AZTEC code is located on every vehicle documents."}
-                    image={scan}
-                    navigate={'KeyboardInput'}
-                    navigation={this.props.navigation}
-                />
-                <CreateCard
-                    text={"Fill out form with your keyboard."}
-                    note={"If you haven't vehicle docs you choose this option."}
-                    image={keyboard}
-                    navigate={'KeyboardInput'}
-                    navigation={this.props.navigation}
-                />
-            </View>
+            <Container>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <CreateCard
+                        text={"Scan AZTEC code to join new customer."}
+                        note={"AZTEC code is located on every vehicle docs."}
+                        image={scan}
+                        navigate={'KeyboardInput'}
+                        navigation={this.props.navigation}
+                    />
+                    <CreateCard
+                        text={"Fill out form with your keyboard."}
+                        note={"If you haven't vehicle docs, choose this option."}
+                        image={keyboard}
+                        navigate={'KeyboardInput'}
+                        navigation={this.props.navigation}
+                    />
+                </View>
+            </Container>
         )
     }
 }

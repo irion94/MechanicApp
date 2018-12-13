@@ -3,7 +3,7 @@ import {View} from "react-native";
 import {Header} from "native-base";
 import {styles} from "../Home/HomeScreen";
 import {applicationColor} from "../../Styles/UniversalStyles";
-import SearchInput from "../../Components/SearchInput";
+import SearchInput from "../../Components/Forms/SearchInput";
 
 
 class SearchScreen extends Component {

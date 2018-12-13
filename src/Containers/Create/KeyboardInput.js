@@ -1,123 +1,147 @@
 import * as React from 'react'
-import {View, TouchableOpacity, Image} from "react-native";
-import {Button, Text, Content} from "native-base";
-import FormInput from "../../Components/FormInput";
-import Information_ListItem from "../../Components/Information_ListItem";
-import personStore from 'src/Stores/Create_store'
+import {Alert, ScrollView, View} from "react-native";
+import {Body, Button, Container, Header, Icon, Left, Right, Text} from "native-base";
 import {observer} from "mobx-react";
-//import scan from 'src/images/scan.gif'
+import {Grid, Row} from "react-native-easy-grid";
+import createStore from 'src/Stores/Create_store'
+import customerList_Store from "../../Stores/CustomerList_Store";
+import vehicleList_Store from "../../Stores/VehicleList_Store";
+import ReusableList from "../../Components/Lists/ReusableList";
+import FormInput from "../../Components/Forms/FormInput";
+import {applicationColor} from "../../Styles/UniversalStyles";
 
 @observer
 class KeyboardInput extends React.Component {
     constructor(props: any) {
         super(props);
         this.state = {
-            rerender: false
+            form: 1,
+            inlineInput: '',
         };
     }
 
+    static navigationOptions = ({navigation}) => ({
+        header: () => {
+            const {params = {title: 'Personal Inf'}} = navigation.state;
+            return (
+                <Header searchBar rounded style={{backgroundColor: applicationColor.header}}>
+                    <Left>
+                        <Button transparent onPress={
+                            () => {
+                                createStore.reset();
+                                navigation.goBack();
+                            }
+                        }
+                        >
+                            <Icon name='arrow-back'/>
+                        </Button>
+                    </Left>
+                    <Body>
+                    <Text style={{fontWeight: '700', color: 'white'}}>
+                        {params.title}
+                    </Text>
+                    </Body>
+                    <Right/>
+                </Header>
+            )
+        }
+
+    });
+
     onChangeTextPerson = (obj) => {
-        personStore.setPerson(obj)
-        console.log('person', personStore.getPerson())
+        createStore.setPersonalities(obj, 'person')
+        this.setState({inlineInput: createStore.getPersonalities('person', 'inline')})
     };
 
     onChangeTextVehicle = (obj) => {
-        personStore.setVehicle(obj)
-        console.log('vehicle', personStore.getVehicle())
+        createStore.setPersonalities(obj, 'vehicle')
+        this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
     };
 
     onBack = () => {
         this.setState({rerender: true})
     };
 
-    onPersonPress = () => {
-        this.props.navigation.navigate('NewCustomer_Picker', {
-            component: <FormInput navigation={this.props.navigation}
-                                  keys={['name', 'surname', 'phone', 'email']}
-                                  disabled={false}
-                                  onChangeText={this.onChangeTextPerson}
-                                  onBack={this.onBack}
-            />
-        })
-    }
+    onSend = () => {
+        let onPress = () => {
+            this.setState({inlineInput: ''});
+            this.setState({form: 2});
+            this.props.navigation.setParams({title: 'Vehicle Inf'})
+        };
 
-    onVehiclePress = () => {
-        this.props.navigation.navigate('NewCustomer_Picker', {
-            component: <FormInput navigation={this.props.navigation}
-                                  keys={['brand', 'model', 'vin', 'rej']}
-                                  disabled={false}
-                                  onChangeText={this.onChangeTextVehicle}
-                                  onBack={this.onBack}
-            />
-        })
-    }
+        if (customerList_Store.getFilteredArray().length > 0) {
+            Alert.alert(
+                'Warning',
+                'W bazie znajduje się ktoś o podobnych personaliach...',
+                [
+                    {text: 'ok, dodaj mimo wszystko', onPress: () => onPress()},
+                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: 'OK', onPress: () => console.log('OK Pressed')},
+                ],
+                {cancelable: false}
+            )
+        }
+        else {
+            onPress()
+        }
+    };
 
-    render(){
-        return(
-            <FormInput navigation={this.props.navigation}
-                       keys={['name', 'surname', 'phone', 'email']}
-                       disabled={false}
-                       onChangeText={this.onChangeTextPerson}
-                       onBack={this.onBack}
-            />
+    render() {
+        return (
+            <Container>
+                <Grid>
+                    <Row size={30} style={{alignItems: 'center', margin: 10}}>
+                        <ScrollView>
+                            {
+                                this.state.form === 1 ?
+                                    <View>
+                                        <FormInput navigation={this.props.navigation}
+                                                   keys={['name', 'surname', 'phone', 'email']}
+                                                   disabled={false}
+                                                   onChangeText={this.onChangeTextPerson}
+                                                   onSend={this.onSend}
+                                                   onBack={this.onBack}
+                                        />
+                                    </View>
+                                    :
+                                    <View>
+                                        <FormInput navigation={this.props.navigation}
+                                                   keys={['brand', 'model', 'vin', 'rej']}
+                                                   disabled={false}
+                                                   onChangeText={this.onChangeTextVehicle}
+                                                   onSend={this.onSend}
+                                                   onBack={this.onBack}
+                                        />
+                                    </View>
+                            }
+                        </ScrollView>
+                    </Row>
+
+
+                    <Row size={60} style={{width: '100%'}}>
+                        <ScrollView>
+                            {
+                                this.state.form === 1 ?
+                                    <ReusableList
+                                        array={customerList_Store.getCustomerArray()}
+                                        input={this.state.inlineInput}
+                                        objectKeys={['name', 'surname', 'email', 'phone']}
+                                        arrayLimiter={4}
+                                    />
+                                    :
+                                    <ReusableList
+                                        array={vehicleList_Store.vehicleArray}
+                                        input={this.state.inlineInput}
+                                        objectKeys={['brand', 'model', 'vin', 'rej']}
+                                        arrayLimiter={4}
+                                    />
+                            }
+                        </ScrollView>
+                    </Row>
+                </Grid>
+            </Container>
         )
     }
-
-    // render() {
-    //     let person = personStore.getPerson().name;
-    //     let vehicle = personStore.getVehicle().brand;
-    //     return (
-    //         <Content padder>
-    //             <Content>
-    //
-    //                 <Button
-    //                     style={{width: '100%', height: 'auto'}}
-    //                     light
-    //                     onPress={() => this.onPersonPress()}
-    //                 >
-    //                     {
-    //                         person !== '' ?
-    //                             <Information_ListItem
-    //                                 object={personStore.getPerson()}
-    //                                 onPress={this.onPersonPress}
-    //                                 header={"Personal Information"}
-    //                             />
-    //
-    //                             : <Text>Personal Information</Text>
-    //                     }
-    //                 </Button>
-    //             </Content>
-    //
-    //             <Content style={{marginTop:10}}>
-    //                 {person !== '' ?
-    //                     <Button style={{width: '100%', height: 'auto'}}
-    //                             light
-    //                             onPress={() => this.onVehiclePress()}
-    //                     >
-    //                         {
-    //                             vehicle !== '' ?
-    //                                 <Information_ListItem object={personStore.getVehicle()}
-    //                                                       onPress={this.onVehiclePress}
-    //                                                       header={"Vehicle Information"}
-    //                                 />
-    //
-    //                                 : <Text>Vehicle Information</Text>
-    //                         }
-    //                     </Button>
-    //                     :
-    //                     null
-    //                 }
-    //             </Content>
-    //             {
-    //                 vehicle !== '' ?
-    //                     <Button style={{width: '100%', height: 'auto'}}>
-    //                         <Text>add</Text>
-    //                     </Button>
-    //                     : null
-    //             }
-    //         </Content>
-    //     )
-    // }
 }
 
 export default KeyboardInput

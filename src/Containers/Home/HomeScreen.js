@@ -3,8 +3,8 @@ import {Icon} from 'react-native-elements'
 import {ScrollView, StyleSheet, View} from "react-native";
 import {Header} from 'native-base';
 import {applicationColor} from "../../Styles/UniversalStyles";
-import SearchInput from "../../Components/SearchInput";
-import FloatButton from "../../Components/FloatButton";
+import SearchInput from "../../Components/Forms/SearchInput";
+import FloatButton from "../../Components/Buttons/FloatButton";
 
 class HomeScreen extends React.Component <State, Props> {
     constructor(props) {
@@ -14,10 +14,6 @@ class HomeScreen extends React.Component <State, Props> {
             token: null
         };
     }
-
-    changeText = (input) => {
-        this.setState({input: input});
-    };
 
     static navigationOptions = ({navigation}) => ({
         header: () => {
@@ -37,6 +33,11 @@ class HomeScreen extends React.Component <State, Props> {
         }
 
     });
+
+    changeText = (input) => {
+        this.setState({input: input});
+    };
+
 
 
     componentWillMount() {

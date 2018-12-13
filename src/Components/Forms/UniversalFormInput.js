@@ -7,10 +7,9 @@
 import * as React from 'react'
 import {Input, Item, Label,} from "native-base";
 import objectDeepFromEntries from "object-deep-from-entries"
-import personStore from "../Stores/Create_store";
 
 const UniversalFormInput = (props) => {
-    let {stateKey, onChangeText, optional, disabled} = props;
+    let {nextKey, stateKey, onChangeText, optional, disabled} = props;
     let placeholder = stateKey.charAt(0).toUpperCase() + stateKey.slice(1);
 
     if (optional) {
@@ -23,9 +22,20 @@ const UniversalFormInput = (props) => {
     };
 
     return (
-        <Item floatingLabel={true}>
+        <Item floatingLabel={true} style={{width:'100%', flex:1, margin:15}}>
             <Label style={{textAlign: 'center'}}>{placeholder}</Label>
-            <Input disabled={disabled} onChangeText={(text) => _onChangeText(text)}/>
+            <Input disabled={disabled}
+                   onChangeText={(text) => _onChangeText(text)}
+                   defaultValue={'ehh'}
+                   //blurOnSubmit={false}
+                   returnKeyType={nextKey === undefined ? 'send' : 'next'}
+                   onSubmitEditing={nextKey === undefined ?
+                       () => props.onSend() :
+                       () => props.focusNextField(nextKey)}
+                   getRef={input => {
+                       props.inputs[stateKey] = input
+                   }}
+            />
         </Item>
     )
 };
