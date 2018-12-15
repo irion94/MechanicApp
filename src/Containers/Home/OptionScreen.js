@@ -1,11 +1,26 @@
 import * as React from 'react'
 import {Image, TouchableOpacity, View} from "react-native";
+import ReusablePicker from "../../Components/Lists/ReusablePicker";
+import createStore from "../../Stores/Create_store";
+import {makeGenerator, modelGenerator} from "../../ObjectGenerator";
 
 class OptionScreen extends React.Component {
-    state = {};
+    constructor(props){
+        super(props)
+        this.state = {
+            selected:{
+                brand: "Audi"
+            }
+        }
+    }
 
+    onChangeValue = (obj) =>{
+        this.setState({selected:obj});
+        console.log(this.state, obj)
+    }
 
     render() {
+        let array = makeGenerator();
         return (
             <View style={{flex: 1}}>
                 <View style={{flexDirection: 'row'}}>
@@ -16,6 +31,8 @@ class OptionScreen extends React.Component {
                         />
                     </TouchableOpacity>
                 </View>
+                    <ReusablePicker array={array} searchByKeys={['brand']} onChangeValue={this.onChangeValue} selected={this.state.selected} placeholder={'brand'}/>
+                <ReusablePicker array={array} searchByKeys={['brand']} onChangeValue={this.onChangeValue} selected={this.state.selected} placeholder={'brand'}/>
             </View>
         );
     }

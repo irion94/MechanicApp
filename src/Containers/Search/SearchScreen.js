@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {View} from "react-native";
 import {Header} from "native-base";
-import {styles} from "../Home/HomeScreen";
 import {applicationColor} from "../../Styles/UniversalStyles";
 import SearchInput from "../../Components/Forms/SearchInput";
 
@@ -26,8 +25,8 @@ class SearchScreen extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Header searchBar rounded style={{backgroundColor: applicationColor.header}}>
+            <View>
+                <Header style={{backgroundColor: applicationColor.header}}>
                     <SearchInput onChangeText={this.handleOnChangeText} placeholder={'Search in database'}/>
                 </Header>
                 {/*<PersonList input={this.state.input} input={this.state.input}/>*/}

@@ -9,6 +9,8 @@ import vehicleList_Store from "../../Stores/VehicleList_Store";
 import ReusableList from "../../Components/Lists/ReusableList";
 import FormInput from "../../Components/Forms/FormInput";
 import {applicationColor} from "../../Styles/UniversalStyles";
+import {makeGenerator, modelGenerator, randomModel} from "../../ObjectGenerator";
+
 
 @observer
 class KeyboardInput extends React.Component {
@@ -17,6 +19,11 @@ class KeyboardInput extends React.Component {
         this.state = {
             form: 1,
             inlineInput: '',
+            vehicleSelected: {
+                brand: null,
+                model: null,
+            },
+            array: makeGenerator()
         };
     }
 
@@ -48,18 +55,18 @@ class KeyboardInput extends React.Component {
 
     });
 
+
     onChangeTextPerson = (obj) => {
-        createStore.setPersonalities(obj, 'person')
+        createStore.setPersonalities(obj, 'person');
         this.setState({inlineInput: createStore.getPersonalities('person', 'inline')})
     };
 
     onChangeTextVehicle = (obj) => {
-        createStore.setPersonalities(obj, 'vehicle')
-        this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
-    };
-
-    onBack = () => {
-        this.setState({rerender: true})
+        this.setState({...this.state, ...obj});
+        console.log(obj)
+        // console.log('keyboard input state', this.state.vehicleSelected)
+        //createStore.setPersonalities(obj, 'vehicle');
+        //this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
     };
 
     onSend = () => {
@@ -87,6 +94,7 @@ class KeyboardInput extends React.Component {
     };
 
     render() {
+        console.log('keyboar input', this.state)
         return (
             <Container>
                 <Grid>
@@ -100,7 +108,7 @@ class KeyboardInput extends React.Component {
                                                    disabled={false}
                                                    onChangeText={this.onChangeTextPerson}
                                                    onSend={this.onSend}
-                                                   onBack={this.onBack}
+                                                   oneColumn={false}
                                         />
                                     </View>
                                     :
@@ -110,7 +118,23 @@ class KeyboardInput extends React.Component {
                                                    disabled={false}
                                                    onChangeText={this.onChangeTextVehicle}
                                                    onSend={this.onSend}
-                                                   onBack={this.onBack}
+                                                   oneColumn={false}
+                                                   pickerProps={{
+                                                       pickerKeys:['brand','model'],
+                                                       picker:{
+                                                           brand: {
+                                                               array:this.state.array,
+                                                               keys: ['brand'],
+                                                               //vehicleSelected: this.state.vehicleSelected.brand,
+                                                           },
+                                                           model:{
+                                                               array:  createStore.personalities.vehicle !== undefined ? modelGenerator(createStore.personalities.vehicle.brand) : randomModel() ,
+                                                               keys: ['model'],
+                                                               //vehicleSelected: this.state.vehicleSelected.model
+                                                           }
+
+                                                       }
+                                                   }}
                                         />
                                     </View>
                             }

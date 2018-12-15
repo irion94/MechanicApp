@@ -1,10 +1,9 @@
 import * as React from 'react'
 import {Icon} from 'react-native-elements'
-import {ScrollView, StyleSheet, View} from "react-native";
+import {ScrollView, StyleSheet, View, StatusBar} from "react-native";
 import {Header} from 'native-base';
 import {applicationColor} from "../../Styles/UniversalStyles";
 import SearchInput from "../../Components/Forms/SearchInput";
-import FloatButton from "../../Components/Buttons/FloatButton";
 
 class HomeScreen extends React.Component <State, Props> {
     constructor(props) {
@@ -17,11 +16,17 @@ class HomeScreen extends React.Component <State, Props> {
 
     static navigationOptions = ({navigation}) => ({
         header: () => {
-            const {params = {}} = navigation.state;
+            const {
+                params = {
+                    onChangeText: () => {
+                    }
+                }
+            } = navigation.state;
             return (
-                <Header searchBar rounded style={{backgroundColor: applicationColor.header}}>
-                    <SearchInput onChangeText={params.changeText} placeholder={'Search in TODO'}/>
+                <Header  style={{backgroundColor: applicationColor.header}}>
+                    <SearchInput onChangeText={params.onChangeText} placeholder={'Search in Todo...'}/>
                     <Icon
+                        iconStyle={{marginBottom:5}}
                         name="settings"
                         size={40}
                         onPress={() => {
@@ -34,24 +39,23 @@ class HomeScreen extends React.Component <State, Props> {
 
     });
 
-    changeText = (input) => {
+    onChangeText = (input) => {
         this.setState({input: input});
     };
 
-
-
-    componentWillMount() {
+    componentDidMount() {
         this.props.navigation.setParams({
-            changeText: this.changeText
+            onChangeText: this.onChangeText
         })
     }
 
     render() {
         return (
             <View style={{flex: 1, backgroundColor: 'white'}}>
+                <StatusBar hidden />
                 <ScrollView>
                     {/*<VehiclesListTodo navigation={this.props.navigation} props={this.props} from={'HomeScreen'}*/}
-                                      {/*input={this.state}/>*/}
+                    {/*input={this.state}/>*/}
                 </ScrollView>
                 {/*<FloatButton active={false}/>*/}
             </View>
@@ -61,14 +65,3 @@ class HomeScreen extends React.Component <State, Props> {
 
 
 export default (HomeScreen)
-
-export const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // alignItems: 'center',
-        // justifyContent: 'center',
-        backgroundColor: 'white'
-    }
-});
-
-

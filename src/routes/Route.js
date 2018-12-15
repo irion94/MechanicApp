@@ -34,7 +34,7 @@ const CreateStack = createStackNavigator({
     {
         navigationOptions: {
             headerStyle: {
-                backgroundColor: applicationColor.header
+                height: 0
             }
         }
 

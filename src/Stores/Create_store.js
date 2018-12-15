@@ -1,7 +1,12 @@
-import {action, observable} from "mobx";
+import {action, autorun, observable} from "mobx";
 import {map} from 'ramda'
+import {makeGenerator} from "../ObjectGenerator";
 
 class Create_store {
+    constructor(){
+    }
+    @observable brand_models = makeGenerator();
+
     @observable personalities = {
         person: {},
         vehicle: {}
@@ -11,11 +16,17 @@ class Create_store {
         this.personalities[key] = {}
     };
 
+    @action setSelected = (item) => {
+        this.selected = item
+    }
+
     @action setPersonalities = (input, key) => {
-        this.personalities[key] = input;
+        console.log('store',input)
+        this.personalities[key] = {...this.personalities[key] ,...input};
+        console.log('store2',this.personalities)
     };
 
-    @action getPersonalities = (key, method) => {
+    getPersonalities = (key, method) => {
         if (method === 'object') {
             return this.personalities[key]
         }
@@ -27,6 +38,8 @@ class Create_store {
     }
 }
 
+
 let createStore = new Create_store();
+autorun(() => console.log(createStore.personalities));
 
 export default createStore;

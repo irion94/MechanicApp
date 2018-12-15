@@ -1,4 +1,7 @@
 import faker from 'faker';
+import {map} from 'ramda'
+import * as carModels from 'src/carModels'
+//import fs from 'fs'
 
 let randomTodo = () => {
     let arr = [];
@@ -16,6 +19,52 @@ let randomTodo = () => {
     }
     return arr;
 };
+
+export let randomModel = () => {
+    let arr = [];
+    for(let i = 0; i < 10; i++){
+        arr.push({
+            model: faker.name.lastName()
+        })
+    }
+    return arr
+}
+
+export let randomBrand = () => {
+    let arr = [];
+    for(let i = 0; i<faker.random.number({min:5,max:10}); i++){
+        arr.push({
+            brand: faker.name.firstName(),
+        })
+    }
+    return arr
+}
+
+export let makeModelGenerator = () => {
+    let arr = [];
+    // arr = map( car => ({brand: car.brand, models: map(item => map(x => ({model:x}) ,item),car)['models']})  ,carModels)
+     map( item => arr.push(item), carModels);
+    // console.log('generator:', map(item => JSON.stringify(item), arr));
+    console.log(arr)
+
+    return arr;
+}
+
+export let makeGenerator = () => {
+    let arr = [];
+   // arr = map( car => ({brand: car.brand, models: map(item => map(x => ({model:x}) ,item),car)['models']})  ,carModels)
+    map( item => arr.push({brand:item.brand}), carModels)
+    // console.log('generator:', map(item => JSON.stringify(item), arr));
+    console.log(arr)
+
+    return arr;
+}
+
+export let modelGenerator = (make) => {
+    console.log('OG',make, makeModelGenerator().find(item => item.brand === make))
+
+    return makeModelGenerator().find(item => item.brand === make).models
+}
 
 
 
