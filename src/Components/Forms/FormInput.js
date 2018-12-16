@@ -4,6 +4,7 @@ import {observer} from "mobx-react";
 import Col from "react-native-easy-grid/Components/Row";
 import objectDeepFromEntries from "object-deep-from-entries";
 import {Input, Item, Label, View} from "native-base";
+import {Platform} from 'react-native'
 import PropTypes from 'prop-types'
 import ReusablePicker from "../Lists/ReusablePicker";
 import createStore from "../../Stores/Create_store";
@@ -21,19 +22,19 @@ class FormInput extends React.Component {
     }
 
     render() {
-        const {keys, disabled, oneColumn, vehicleSelected} = this.props;
+        const {keys, disabled, oneColumn} = this.props;
         const {pickerKeys, picker} = this.props.pickerProps
 
         if (!oneColumn) {
             let rows = Math.ceil(keys.length / 2);
-            let k = [];
+            let modifyKeys = [];
             if (rows > 1) {
                 for (let i = 0; i <= rows; i = i + rows) {
-                    k.push(keys.slice(i, rows + i))
+                    modifyKeys.push(keys.slice(i, rows + i))
                 }
             }
             else {
-                k.push(keys)
+                modifyKeys.push(keys)
             }
 
             return (
@@ -44,8 +45,9 @@ class FormInput extends React.Component {
                             map((key) => {
                                     if (pickerKeys !== undefined && pickerKeys.includes(key)) {
                                         return (
-                                            <View style={{flex: 1, width: '100%'}}>
+                                            <View style={{flex: 1, width: '100%'}} key={key}>
                                                 <ReusablePicker
+                                                    key={key}
                                                     array={picker[key].array}
                                                     searchByKeys={picker[key].keys}
                                                     onChangeText={this.props.onChangeText}
@@ -73,9 +75,7 @@ class FormInput extends React.Component {
                                 },
                                 item)
                         }
-                    </Col>, k
-                )
-
+                    </Col>, modifyKeys)
             )
         }
         else {
@@ -117,8 +117,8 @@ export const UniversalFormInput = (props) => {
         <Item floatingLabel={true} style={{width: '100%', flex: 1, margin: 15}}>
             <Label style={{textAlign: 'center'}}>{placeholder}</Label>
             <Input disabled={disabled}
+                   autoCorrect={false}
                    onChangeText={(text) => _onChangeText(text)}
-                   defaultValue={'ehh'}
                    blurOnSubmit={nextKey !== undefined}
                    returnKeyType={nextKey === undefined ? 'send' : 'next'}
                    onSubmitEditing={nextKey === undefined ?
@@ -156,7 +156,7 @@ FormInput.propTypes = {
     disabled: PropTypes.bool,
     pickerKey: PropTypes.any,
     oneColumn: PropTypes.bool,
-    pickerProps: PropTypes.array
+    pickerProps: PropTypes.object
 };
 
 FormInput.defaultProps = {

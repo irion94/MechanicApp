@@ -1,8 +1,6 @@
 import * as React from 'react'
-import {Image, TouchableOpacity, View} from "react-native";
-import ReusablePicker from "../../Components/Lists/ReusablePicker";
-import createStore from "../../Stores/Create_store";
-import {makeGenerator, modelGenerator} from "../../ObjectGenerator";
+import {Image, TouchableOpacity, View, Picker} from "react-native";
+import {makeGenerator} from "../../ObjectGenerator";
 
 class OptionScreen extends React.Component {
     constructor(props){
@@ -31,8 +29,15 @@ class OptionScreen extends React.Component {
                         />
                     </TouchableOpacity>
                 </View>
-                    <ReusablePicker array={array} searchByKeys={['brand']} onChangeValue={this.onChangeValue} selected={this.state.selected} placeholder={'brand'}/>
-                <ReusablePicker array={array} searchByKeys={['brand']} onChangeValue={this.onChangeValue} selected={this.state.selected} placeholder={'brand'}/>
+
+                <Picker
+                    mode={'dialog'}
+                    selectedValue={this.state.language}
+                    style={{ height: 50, width: 100 }}
+                    onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
+                    <Picker.Item label="Java" value="java" />
+                    <Picker.Item label="JavaScript" value="js" />
+                </Picker>
             </View>
         );
     }

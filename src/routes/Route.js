@@ -87,7 +87,7 @@ export default createBottomTabNavigator({
                 color: applicationColor.header
             }
         }),
-        initialRouteName: 'Create',
+        initialRouteName: 'Home',
         tabBarOptions: {
             activeTintColor: applicationColor.activeTintColor,
             inactiveTintColor: 'gray',

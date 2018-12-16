@@ -11,12 +11,12 @@ import * as React from 'react'
 import {List, ListItem, Text} from "react-native-elements";
 import {map} from 'ramda'
 import searchInArray from 'src/Utilities/FuseJS'
-import customerList_Store from "../../Stores/CustomerList_Store";
 import PropTypes from 'prop-types'
+import mapObjIndexed from "ramda/es/mapObjIndexed";
 
 
 const ReusableList = (props) => {
-    let {array, input, objectKeys, arrayLimiter} = props;
+    let {array, input, objectKeys, arrayLimiter, primaryKey, setFilteredArray, alertFirst} = props;
 
     const onResearch = () => {
         let filteredArray;
@@ -27,7 +27,7 @@ const ReusableList = (props) => {
             filteredArray = searchInArray(objectKeys, input, array)
         }
 
-        customerList_Store.setFilteredArray(filteredArray);
+        setFilteredArray(filteredArray);
         return filteredArray;
     };
 
@@ -36,13 +36,15 @@ const ReusableList = (props) => {
             {
                 map((object) => (
                     <ListItem
-                        key={object.phone}
+                        titleStyle={onResearch()[0] === object ? {color:'red'} :{color:'black'}}
+                        titleNumberOfLines={5}
+                        onPress={()=>{}}
+                        key={object.id}
                         title={
                             map(item => {
-                                    return <Text
-                                        key={objectKeys.indexOf(item)}>{item.charAt(0).toUpperCase() + item.slice(1) + ': ' + object[item]}</Text>
+                                    return item.charAt(0).toUpperCase() + item.slice(1) + ': ' + object[item] + '\n'
                                 }
-                                , objectKeys)
+                                , objectKeys).join('')
                         }
                     />
                 ), input === ''
@@ -60,13 +62,17 @@ const ReusableList = (props) => {
 export default (ReusableList);
 
 ReusableList.propTypes = {
-    array: PropTypes.object.isRequired,
+    array: PropTypes.any.isRequired,
     objectKeys: PropTypes.array.isRequired,
+    primaryKey: PropTypes.string.isRequired,
+    setFilteredArray: PropTypes.func.isRequired,
     input: PropTypes.string,
-    arrayLimiter: PropTypes.number
+    arrayLimiter: PropTypes.number,
+    alertFirst: PropTypes.bool
 };
 
 ReusableList.defaultProps = {
     arrayLimiter: 0,
-    input: ''
+    input: '',
+    alertFirst: false
 };

@@ -1,12 +1,11 @@
 import * as React from 'react'
 import {Header, Icon, Picker} from "native-base";
 import {map} from "ramda";
-import {StyleSheet, View, TouchableOpacity} from "react-native";
-import {borderStyles, universalStyles, width} from "src/Styles/UniversalStyles";
+import {Platform, StyleSheet, TouchableOpacity} from "react-native";
+import {borderStyles, universalStyles} from "src/Styles/UniversalStyles";
 import searchInArray from "../../Utilities/FuseJS";
 import SearchInput from "../Forms/SearchInput";
 import {applicationColor} from "../../Styles/UniversalStyles";
-import createStore from 'src/Stores/Create_store'
 import PropTypes from 'prop-types'
 import {observer} from "mobx-react";
 
@@ -22,19 +21,16 @@ import {observer} from "mobx-react";
  */
 @observer
 class ReusablePicker extends React.Component<Props> {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             search: '',
-            selected: this.props.selected,
         }
 
     }
 
     onChange = (obj) => {
-        console.log('pick',this.state)
-        this.setState({selected:obj}, () => createStore.setPersonalities(obj,'vehicle'))
-        //this.props.onChangeValue(obj);
+        this.setState({selected: obj}, () => this.props.onChangeText(obj))
     }
 
     onChangeText = (search) => {
@@ -43,7 +39,28 @@ class ReusablePicker extends React.Component<Props> {
 
     render() {
         let {array, searchByKeys, withKeys, deeperKey, placeholder} = this.props;
-        return (
+        if(Platform.OS === 'android') {
+            return (
+                <Picker
+                    style={[componentStyle.picker, borderStyles.border]}
+                    placeholder={placeholder}
+                    selectedValue={this.state.selected}
+                    onValueChange={this.onChange.bind(this)}
+                >
+                    {
+                        map((item) => (
+                            <Picker.Item
+                                key={item[placeholder]}
+                                label={item.brand}
+                                value={item}
+                            />
+                        ), this.state.search === '' ? array : searchInArray(searchByKeys, this.state.search, array))
+                    }
+                </Picker>
+            )
+        }
+        else {
+            return (
                 <Picker
                     style={[componentStyle.picker, borderStyles.border]}
                     renderHeader={(backAction) => (
@@ -61,7 +78,7 @@ class ReusablePicker extends React.Component<Props> {
                     {
                         map((item) => (
                             <Picker.Item
-                                key={item[placeholder]}
+                                key={item}
                                 label={
                                     map((key) =>
                                         (withKeys ? key.toString().toUpperCase() + ": " : '') + (deeperKey && item[key][deeperKey] !== undefined ? item[key][deeperKey] : item[key]) + ' \n', searchByKeys).toString().split(',')
@@ -71,11 +88,10 @@ class ReusablePicker extends React.Component<Props> {
                         ), this.state.search === '' ? array : searchInArray(searchByKeys, this.state.search, array))
                     }
                 </Picker>
-        )
+            )
+        }
     }
 }
-
-
 
 
 const PickerHeader = (props: any) => {
@@ -88,7 +104,7 @@ const PickerHeader = (props: any) => {
             >
                 <Icon name='arrow-back' color={'white'}/>
             </TouchableOpacity>
-            <SearchInput onChangeText={props.onChangeText} placeholder={'Search...'}/>
+            <SearchInput onChangeText={props.onChangeText} placeholder={'Search...'} autoFocus={true}/>
             <TouchableOpacity
                 style={universalStyles.centerItem}
                 onPress={() => {
@@ -103,14 +119,14 @@ const PickerHeader = (props: any) => {
 
 const componentStyle = StyleSheet.create({
     picker: {
-        width:'95%',
-        height: 'auto',
+        width: '95%',
+        //height: 'auto',
 
     }
 });
 
 ReusablePicker.propTypes = {
-    array: PropTypes.array.isRequired,
+    array: PropTypes.any.isRequired,
     searchByKeys: PropTypes.array.isRequired,
     //deeperKey: PropTypes.string.isRequired,
     withKeys: PropTypes.bool,
@@ -123,9 +139,9 @@ ReusablePicker.defaultProps = {
     searchByKeys: [],
     withKeys: false,
     placeholder: '',
-    onChangeValue: () => {}
+    onChangeValue: () => {
+    }
 };
-
 
 
 export default ReusablePicker

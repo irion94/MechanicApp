@@ -9,7 +9,8 @@ import vehicleList_Store from "../../Stores/VehicleList_Store";
 import ReusableList from "../../Components/Lists/ReusableList";
 import FormInput from "../../Components/Forms/FormInput";
 import {applicationColor} from "../../Styles/UniversalStyles";
-import {makeGenerator, modelGenerator, randomModel} from "../../ObjectGenerator";
+import brandModelStore from "../../Stores/BrandModelList_Store";
+import {loadRandomCarList} from "../../ObjectGenerator";
 
 
 @observer
@@ -23,7 +24,9 @@ class KeyboardInput extends React.Component {
                 brand: null,
                 model: null,
             },
-            array: makeGenerator()
+            array: brandModelStore.setBrandList(),
+            modelArray: [{}],
+            filteredArray: [{}]
         };
     }
 
@@ -62,21 +65,21 @@ class KeyboardInput extends React.Component {
     };
 
     onChangeTextVehicle = (obj) => {
-        this.setState({...this.state, ...obj});
         console.log(obj)
-        // console.log('keyboard input state', this.state.vehicleSelected)
-        //createStore.setPersonalities(obj, 'vehicle');
-        //this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
+        createStore.setPersonalities(obj,'vehicle')
+        this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
+
     };
 
     onSend = () => {
+        let {form} = this.state;
         let onPress = () => {
-            this.setState({inlineInput: ''});
-            this.setState({form: 2});
-            this.props.navigation.setParams({title: 'Vehicle Inf'})
+            this.setState({form: 2}, () => this.setState({inlineInput: ''}, () => this.props.navigation.setParams({title: 'Vehicle Inf'})));
+            // this.props.navigation.setParams({title: 'Vehicle Inf'})
+            // this.setState({inlineInput: ''});
         };
 
-        if (customerList_Store.getFilteredArray().length > 0) {
+        if (form === 1 ? customerList_Store.getFilteredArray().length !== 0 : vehicleList_Store.getFilteredArray().length !== 0) {
             Alert.alert(
                 'Warning',
                 'W bazie znajduje się ktoś o podobnych personaliach...',
@@ -93,8 +96,11 @@ class KeyboardInput extends React.Component {
         }
     };
 
+    componentDidMount(){
+        brandModelStore.setBrandList().then( () => this.setState({array:brandModelStore.brandList}))
+    }
+
     render() {
-        console.log('keyboar input', this.state)
         return (
             <Container>
                 <Grid>
@@ -105,6 +111,7 @@ class KeyboardInput extends React.Component {
                                     <View>
                                         <FormInput navigation={this.props.navigation}
                                                    keys={['name', 'surname', 'phone', 'email']}
+                                                   searchByKeys={['vin','rej']}
                                                    disabled={false}
                                                    onChangeText={this.onChangeTextPerson}
                                                    onSend={this.onSend}
@@ -115,20 +122,20 @@ class KeyboardInput extends React.Component {
                                     <View>
                                         <FormInput navigation={this.props.navigation}
                                                    keys={['brand', 'model', 'vin', 'rej']}
+                                                   searchByKeys={['vin','rej']}
                                                    disabled={false}
                                                    onChangeText={this.onChangeTextVehicle}
                                                    onSend={this.onSend}
                                                    oneColumn={false}
                                                    pickerProps={{
-                                                       pickerKeys:['brand','model'],
+                                                       pickerKeys:['brand', 'model'],
                                                        picker:{
                                                            brand: {
                                                                array:this.state.array,
                                                                keys: ['brand'],
-                                                               //vehicleSelected: this.state.vehicleSelected.brand,
                                                            },
                                                            model:{
-                                                               array:  createStore.personalities.vehicle !== undefined ? modelGenerator(createStore.personalities.vehicle.brand) : randomModel() ,
+                                                               array:  brandModelStore.getModelList(createStore.personalities.vehicle.brand),
                                                                keys: ['model'],
                                                                //vehicleSelected: this.state.vehicleSelected.model
                                                            }
@@ -148,16 +155,20 @@ class KeyboardInput extends React.Component {
                                 this.state.form === 1 ?
                                     <ReusableList
                                         array={customerList_Store.getCustomerArray()}
+                                        setFilteredArray={customerList_Store.setFilteredArray}
                                         input={this.state.inlineInput}
                                         objectKeys={['name', 'surname', 'email', 'phone']}
-                                        arrayLimiter={4}
+                                        primaryKey={'phone'}
+                                        arrayLimiter={5}
                                     />
                                     :
                                     <ReusableList
-                                        array={vehicleList_Store.vehicleArray}
+                                        array={vehicleList_Store.getVehicleArray()}
+                                        setFilteredArray={vehicleList_Store.setFilteredArray}
                                         input={this.state.inlineInput}
                                         objectKeys={['brand', 'model', 'vin', 'rej']}
-                                        arrayLimiter={4}
+                                        primaryKey={'vin'}
+                                        arrayLimiter={5}
                                     />
                             }
                         </ScrollView>

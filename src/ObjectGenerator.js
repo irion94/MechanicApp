@@ -1,6 +1,7 @@
 import faker from 'faker';
 import {map} from 'ramda'
 import * as carModels from 'src/carModels'
+import * as vehicleList from 'src/vehicles'
 //import fs from 'fs'
 
 let randomTodo = () => {
@@ -42,46 +43,40 @@ export let randomBrand = () => {
 
 export let makeModelGenerator = () => {
     let arr = [];
-    // arr = map( car => ({brand: car.brand, models: map(item => map(x => ({model:x}) ,item),car)['models']})  ,carModels)
      map( item => arr.push(item), carModels);
-    // console.log('generator:', map(item => JSON.stringify(item), arr));
-    console.log(arr)
-
     return arr;
 }
 
 export let makeGenerator = () => {
     let arr = [];
-   // arr = map( car => ({brand: car.brand, models: map(item => map(x => ({model:x}) ,item),car)['models']})  ,carModels)
     map( item => arr.push({brand:item.brand}), carModels)
-    // console.log('generator:', map(item => JSON.stringify(item), arr));
-    console.log(arr)
-
     return arr;
 }
 
 export let modelGenerator = (make) => {
-    console.log('OG',make, makeModelGenerator().find(item => item.brand === make))
-
     return makeModelGenerator().find(item => item.brand === make).models
-}
+};
 
 
-
-
-
-let randomCar = (i:number) => {
+let randomCar = (i) =>{
+    let arr = makeModelGenerator();
+    let item = arr[Math.floor(Math.random()*arr.length)];
+    //let itmod = item.models
+    let model = item.models[Math.floor(Math.random()*1)];
     let car = {
         id: i,
-        brand: 'Car_Mark ' + faker.name.firstName(),
-        model: 'Car_Model ' + faker.name.lastName(),
+        brand: item.brand,
+        model: model.model,
         ver: 'VI',
         year: faker.random.number({min: 1980, max: 2018}),
         body: 'hatchback',
         vin: faker.random.alphaNumeric(17),
-        rej: 'Car_Rej'+'KBR9N29',
+        rej: 'KBR9N29'+i,
         img: faker.image.avatar(),
     };
+
+
+
     return car;
 };
 
@@ -118,11 +113,36 @@ export let loadRandomOwnerList = () => {
 
 export let loadRandomCarList = () => {
     let array = [];
-    for (let i = 0; i < 10; i++) {
-        array.push(randomCar(i))
-    }
+    map( item => array.push(item), vehicleList);
     return array;
 };
+
+// var RNFS = require('react-native-fs');
+// RNFS.writeFile(RNFS.DocumentDirectoryPath + '/test.txt', JSON.stringify(loadRandomCarList()), 'utf8').then( () => {console.log('file written')});
+//
+// RNFS.readDir(RNFS.DocumentDirectoryPath) // On Android, use "RNFS.DocumentDirectoryPath" (MainBundlePath is not defined)
+//     .then((result) => {
+//         console.log('GOT RESULT', result);
+//
+//         // stat the first file
+//         return Promise.all([RNFS.stat(result[0].path), result[0].path]);
+//     })
+//     .then((statResult) => {
+//         if (statResult[0].isFile()) {
+//             // if we have a file, read it
+//             return RNFS.readFile(statResult[1], 'utf8');
+//         }
+//
+//         return 'no file';
+//     })
+//     .then((contents) => {
+//         // log the file contents
+//         console.log(contents);
+//     })
+//     .catch((err) => {
+//         console.log(err.message, err.code);
+//     });
+
 
 let loadRandomTodoObject = () => {
     let array = [];

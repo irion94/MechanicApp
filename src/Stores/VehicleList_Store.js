@@ -3,7 +3,7 @@ import {loadRandomCarList} from "../ObjectGenerator";
 
 class VehicleList_Store {
     @observable vehicleArray = loadRandomCarList();
-    @observable filteredArray = [];
+    @observable filteredArray = [{}];
 
     @action setVehicleArray = (input) => {
         this.vehicleArray = input;
@@ -13,7 +13,11 @@ class VehicleList_Store {
         this.filteredArray = input;
     };
 
-    @action getFilteredArray = () => {
+    getVehicleArray = () => {
+        return this.vehicleArray.slice()
+    };
+
+    getFilteredArray = () => {
         return this.filteredArray;
     }
 

@@ -8,13 +8,16 @@ const searchInArray = (keys, input, array) => {
         shouldSort: true,
         includeScore: true,
         includeMatches: true,
-        threshold: 0.6,
-        location: 0,
-        distance: 100,
-        maxPatternLength: 32,
-        minMatchCharLength: 1,
+        // tokenize:true,
+        //matchAllTokens: true,
+        threshold: 0.7,
+        //location: 0,
+        distance: 700,
+        maxPatternLength: 64,
+        minMatchCharLength: 5,
         keys: keys
     };
+
 
     let fuse = new Fuse(array, optionsPerson);
     let result = fuse.search(input);

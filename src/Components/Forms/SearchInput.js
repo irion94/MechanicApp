@@ -11,12 +11,12 @@ import PropTypes from 'prop-types'
 
 const SearchInput = (props) => {
 
-    let {placeholder, onChangeText} = props;
+    let {placeholder, onChangeText, autoFocus} = props;
 
     return (
         <Item style={styles.header}>
             <Icon name='search' type={'EvilIcons'} iconStyle={{marginLeft: 10}}/>
-            <Input placeholder={placeholder} onChangeText={(input) => onChangeText(input)}/>
+            <Input placeholder={placeholder} onChangeText={(input) => onChangeText(input)} autoFocus={autoFocus}/>
         </Item>
     )
 };
@@ -24,10 +24,12 @@ const SearchInput = (props) => {
 SearchInput.propTypes = {
     onChangeText: PropTypes.func.isRequired,
     placeholder: PropTypes.string,
+    autoFocus: PropTypes.bool
 };
 
 SearchInput.defautProps = {
     placeholder: '',
+    autoFocus: false
 };
 
 const styles = StyleSheet.create({

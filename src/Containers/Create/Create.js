@@ -35,7 +35,6 @@ export default class Create extends React.Component {
 
 const CreateCard = (props) => {
     let {text, note, image, navigate} = props;
-    console.log(props);
     const onPress = () => {
         props.navigation.navigate(navigate)
     };

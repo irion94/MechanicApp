@@ -3,17 +3,17 @@ import {loadRandomOwnerList} from "../ObjectGenerator";
 
 class CustomerList_Store {
     @observable customerArray = loadRandomOwnerList();
-    @observable filteredArray = [];
+    @observable filteredArray = [{}];
 
     @action setFilteredArray = (input) => {
         this.filteredArray = input
     };
 
-    @action getFilteredArray = () => {
+    getFilteredArray = () => {
         return this.filteredArray;
     }
 
-    @action getCustomerArray = () => {
+    getCustomerArray = () => {
         return this.customerArray;
     }
 
