@@ -50,10 +50,8 @@ class FormInput extends React.Component {
                                                     key={key}
                                                     array={picker[key].array}
                                                     searchByKeys={picker[key].keys}
-                                                    onChangeText={this.props.onChangeText}
-                                                    get={createStore.getPersonalities}
+                                                    onChangeValue={this.props.onChangeText}
                                                     placeholder={key}
-                                                    selected={this.state}
                                                 />
                                             </View>
                                         )
@@ -114,19 +112,20 @@ export const UniversalFormInput = (props) => {
     };
 
     return (
-        <Item floatingLabel={true} style={{width: '100%', flex: 1, margin: 15}}>
+        <Item floatingLabel={true} style={{width: '100%', flex: 1, margin: 15, backgroundColor:'white'}}>
             <Label style={{textAlign: 'center'}}>{placeholder}</Label>
-            <Input disabled={disabled}
-                   autoCorrect={false}
-                   onChangeText={(text) => _onChangeText(text)}
-                   blurOnSubmit={nextKey !== undefined}
-                   returnKeyType={nextKey === undefined ? 'send' : 'next'}
-                   onSubmitEditing={nextKey === undefined ?
-                       () => props.onSend() :
-                       () => props.focusNextField(nextKey)}
-                   getRef={input => {
-                       props.inputs[stateKey] = input
-                   }}
+            <Input
+                disabled={disabled}
+                autoCorrect={false}
+                onChangeText={(text) => _onChangeText(text)}
+                blurOnSubmit={nextKey !== undefined}
+                returnKeyType={nextKey === undefined ? 'send' : 'next'}
+                onSubmitEditing={nextKey === undefined ?
+                    () => props.onSend() :
+                    () => props.focusNextField(nextKey)}
+                getRef={input => {
+                    props.inputs[stateKey] = input
+                }}
             />
         </Item>
     )
@@ -155,7 +154,7 @@ FormInput.propTypes = {
     onSend: PropTypes.func,
     disabled: PropTypes.bool,
     pickerKey: PropTypes.any,
-    oneColumn: PropTypes.bool,
+    //oneColumn: PropTypes.bool,
     pickerProps: PropTypes.object
 };
 
@@ -166,7 +165,7 @@ FormInput.defaultProps = {
     },
     disabled: false,
     pickerKey: false,
-    oneColumn: true,
+    //oneColumn: true,
     pickerProps: {}
 };
 

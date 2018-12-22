@@ -12,11 +12,11 @@ import {List, ListItem, Text} from "react-native-elements";
 import {map} from 'ramda'
 import searchInArray from 'src/Utilities/FuseJS'
 import PropTypes from 'prop-types'
-import mapObjIndexed from "ramda/es/mapObjIndexed";
+import {withNavigation, NavigationActions} from 'react-navigation'
 
 
 const ReusableList = (props) => {
-    let {array, input, objectKeys, arrayLimiter, primaryKey, setFilteredArray, alertFirst} = props;
+    let {array, input, objectKeys, arrayLimiter, setFilteredArray, navigateTo} = props;
 
     const onResearch = () => {
         let filteredArray;
@@ -31,14 +31,22 @@ const ReusableList = (props) => {
         return filteredArray;
     };
 
+    let arr = onResearch();
+
+    let promise = new Promise(resolve => {
+        setTimeout(() => resolve(onResearch()), 3000)
+    });
+
+    promise.then((x) => console.log(x));
+
     return (
         <List>
             {
                 map((object) => (
                     <ListItem
-                        titleStyle={onResearch()[0] === object ? {color:'red'} :{color:'black'}}
+                        titleStyle={arr[0] === object && input.length > 5 ? {color:'red'} :{color:'black'}}
+                        onPress={() => props.navigation.navigate(navigateTo)}
                         titleNumberOfLines={5}
-                        onPress={()=>{}}
                         key={object.id}
                         title={
                             map(item => {
@@ -51,7 +59,7 @@ const ReusableList = (props) => {
                     ?
                     arrayLimiter ? array.slice(0, arrayLimiter) : array
                     :
-                    onResearch())
+                    arr)
             }
         </List>
 
@@ -59,7 +67,7 @@ const ReusableList = (props) => {
 };
 
 
-export default (ReusableList);
+export default withNavigation(ReusableList);
 
 ReusableList.propTypes = {
     array: PropTypes.any.isRequired,
@@ -68,7 +76,8 @@ ReusableList.propTypes = {
     setFilteredArray: PropTypes.func.isRequired,
     input: PropTypes.string,
     arrayLimiter: PropTypes.number,
-    alertFirst: PropTypes.bool
+    alertFirst: PropTypes.bool,
+    navigateTo: PropTypes.string
 };
 
 ReusableList.defaultProps = {

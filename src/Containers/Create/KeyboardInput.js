@@ -67,7 +67,9 @@ class KeyboardInput extends React.Component {
     onChangeTextVehicle = (obj) => {
         console.log(obj)
         createStore.setPersonalities(obj,'vehicle')
-        this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
+        setTimeout( () => {
+            this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
+        },5000)
 
     };
 
@@ -160,6 +162,7 @@ class KeyboardInput extends React.Component {
                                         objectKeys={['name', 'surname', 'email', 'phone']}
                                         primaryKey={'phone'}
                                         arrayLimiter={5}
+                                        navigateTo={'Customer'}
                                     />
                                     :
                                     <ReusableList
@@ -169,6 +172,7 @@ class KeyboardInput extends React.Component {
                                         objectKeys={['brand', 'model', 'vin', 'rej']}
                                         primaryKey={'vin'}
                                         arrayLimiter={5}
+                                        navigateTo={'Vehicle'}
                                     />
                             }
                         </ScrollView>

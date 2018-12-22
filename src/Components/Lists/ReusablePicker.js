@@ -30,7 +30,7 @@ class ReusablePicker extends React.Component<Props> {
     }
 
     onChange = (obj) => {
-        this.setState({selected: obj}, () => this.props.onChangeText(obj))
+        this.setState({selected: obj}, () => this.props.onChangeValue(obj))
     }
 
     onChangeText = (search) => {
@@ -39,6 +39,7 @@ class ReusablePicker extends React.Component<Props> {
 
     render() {
         let {array, searchByKeys, withKeys, deeperKey, placeholder} = this.props;
+        console.log(array)
         if(Platform.OS === 'android') {
             return (
                 <Picker

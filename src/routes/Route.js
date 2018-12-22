@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {createBottomTabNavigator, createStackNavigator} from 'react-navigation'
+import {createBottomTabNavigator, createStackNavigator, createSwitchNavigator} from 'react-navigation'
 import {Icon} from 'react-native-elements';
 import HomeScreen from "../Containers/Home/HomeScreen";
 import OptionScreen from "../Containers/Home/OptionScreen";
@@ -7,13 +7,15 @@ import {applicationColor} from "../Styles/UniversalStyles";
 import SearchScreen from "../Containers/Search/SearchScreen";
 import Create from "../Containers/Create/Create";
 import KeyboardInput from "../Containers/Create/KeyboardInput";
-
+import CustomerScreen from "../Containers/Customer/CustomerScreen";
+import LoginScreen from "../Containers/Root/LoginScreen";
+import NewFirebase from "../Containers/Root/NewFirebase";
 
 const HomeStack = createStackNavigator({
         Home: {screen: HomeScreen},
         Option: {screen: OptionScreen},
+        Customer: {screen: CustomerScreen}
         //Todo: {screen: TodoScreen},
-        // Customer: {screen: CustomerScreen},
         // TodoDetails: {screen: TodoListItemScreen},
         // NewRepair: {screen: New_repair},
     },
@@ -27,35 +29,38 @@ const HomeStack = createStackNavigator({
     }
 );
 
-const CreateStack = createStackNavigator({
-        Create: {screen: Create},
-        KeyboardInput: {screen: KeyboardInput},
-    },
+export const CustomerStack = createStackNavigator({
+        Customer: {screen: CustomerScreen},
+        Vehicle: {screen: OptionScreen}
+    }
+    ,
     {
         navigationOptions: {
             headerStyle: {
-                height: 0
+                backgroundColor: applicationColor.header
             }
         }
 
     }
 );
 
-// const SearchStack = createStackNavigator({
-//         Search: {screen: SearchScreen},
-//         Customer: {screen: CustomerScreen},
-//     },
-//     {
-//         navigationOptions: {
-//             headerStyle: {
-//                 backgroundColor: applicationColor.header
-//             }
-//         }
-//     }
-// );
+const CreateStack = createStackNavigator({
+        Create: {screen: Create},
+        KeyboardInput: {screen: KeyboardInput},
+        Customer: {screen: CustomerScreen}
+    },
+    {
+        navigationOptions: {
+            headerStyle: {
+                height: 0
+            }
+        },
+
+    },
+);
 
 
-export default createBottomTabNavigator({
+export const MechanicStack = createBottomTabNavigator({
         Home: {
             screen: HomeStack,
         },
@@ -64,7 +69,7 @@ export default createBottomTabNavigator({
         },
         Create: {
             screen: CreateStack,
-        },
+        }
     },
     {
         navigationOptions: ({navigation}) => ({
@@ -97,4 +102,25 @@ export default createBottomTabNavigator({
             },
         },
     },
+);
+
+const LoginStack = createStackNavigator({
+        Login: {screen: LoginScreen},
+        Create: {screen: NewFirebase},
+    }
+);
+
+
+export const RootStack = createSwitchNavigator({
+        Login: LoginStack,
+        MechanicView: MechanicStack,
+        CustomerView: CustomerStack
+    },
+    {
+        initialRouteName: 'Login',
+        navigationOptions: {
+            header: null
+        },
+
+    }
 );
