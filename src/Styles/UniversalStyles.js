@@ -24,7 +24,8 @@ export const applicationColor = ({
     header: '#5F6376',
     activeTintColor: 'black',
     inactiveTintColor: 'gray',
-    redAlertColor: '#D53333'
+    redAlertColor: '#D53333',
+    gray: '#43464B'
 });
 
 export const applicationFontSize = ({

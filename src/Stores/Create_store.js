@@ -4,8 +4,9 @@ import {map} from 'ramda'
 class Create_store {
     @observable personalities = {
         person: {},
-        vehicle: {}
+        vehicle: {},
     };
+    @observable visible: true;
 
     @action reset = (key) => {
         this.personalities[key] = {}
@@ -14,6 +15,10 @@ class Create_store {
     @action setPersonalities = (input, key) => {
         this.personalities[key] = {...this.personalities[key] ,...input};
     };
+
+    @action setVisible = () => {
+        this.visible = false
+}
 
     getPersonalities = (key, method) => {
         if (method === 'object') {

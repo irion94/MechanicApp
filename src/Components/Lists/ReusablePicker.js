@@ -39,7 +39,6 @@ class ReusablePicker extends React.Component<Props> {
 
     render() {
         let {array, searchByKeys, withKeys, deeperKey, placeholder} = this.props;
-        console.log(array)
         if(Platform.OS === 'android') {
             return (
                 <Picker

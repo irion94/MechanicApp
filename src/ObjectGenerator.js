@@ -105,7 +105,7 @@ let randomTodoObject = (i:number) => {
 
 export let loadRandomOwnerList = () => {
     let array = [];
-    for (let i = 0; i < 3000; i++) {
+    for (let i = 0; i < 500; i++) {
         array.push(randomOwner(i))
     }
     return array;

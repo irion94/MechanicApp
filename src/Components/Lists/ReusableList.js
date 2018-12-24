@@ -8,15 +8,17 @@
  */
 
 import * as React from 'react'
-import {List, ListItem, Text} from "react-native-elements";
+import {List, ListItem} from "react-native-elements";
 import {map} from 'ramda'
 import searchInArray from 'src/Utilities/FuseJS'
 import PropTypes from 'prop-types'
-import {withNavigation, NavigationActions} from 'react-navigation'
+import {withNavigation} from 'react-navigation'
 
+const uuid = require('uuid/v4');
 
 const ReusableList = (props) => {
-    let {array, input, objectKeys, arrayLimiter, setFilteredArray, navigateTo} = props;
+    let {array, input, objectKeys, arrayLimiter, setFilteredArray, navigateTo, navigateToProps} = props;
+    console.log(props)
 
     const onResearch = () => {
         let filteredArray;
@@ -33,19 +35,24 @@ const ReusableList = (props) => {
 
     let arr = onResearch();
 
-    let promise = new Promise(resolve => {
-        setTimeout(() => resolve(onResearch()), 3000)
-    });
-
-    promise.then((x) => console.log(x));
+    // let promise = new Promise(resolve => {
+    //     setTimeout(() => resolve(onResearch()), 3000)
+    // });
+    //
+    // promise.then((x) => console.log(x));
 
     return (
         <List>
             {
                 map((object) => (
                     <ListItem
-                        titleStyle={arr[0] === object && input.length > 5 ? {color:'red'} :{color:'black'}}
-                        onPress={() => props.navigation.navigate(navigateTo)}
+                        titleStyle={arr[0] === object && input.length > 5 ? {color: 'red'} : {color: 'black'}}
+                        onPress={() => props.navigation.navigate({
+                                routeName: navigateTo,
+                                params: {...navigateToProps, ...object},
+                                key: uuid()
+                            }
+                        )}
                         titleNumberOfLines={5}
                         key={object.id}
                         title={
@@ -72,16 +79,17 @@ export default withNavigation(ReusableList);
 ReusableList.propTypes = {
     array: PropTypes.any.isRequired,
     objectKeys: PropTypes.array.isRequired,
-    primaryKey: PropTypes.string.isRequired,
     setFilteredArray: PropTypes.func.isRequired,
     input: PropTypes.string,
     arrayLimiter: PropTypes.number,
     alertFirst: PropTypes.bool,
-    navigateTo: PropTypes.string
+    navigateTo: PropTypes.any,
+    navigateToProps: PropTypes.object
 };
 
 ReusableList.defaultProps = {
     arrayLimiter: 0,
     input: '',
-    alertFirst: false
+    alertFirst: false,
+    navigateToProps: {}
 };

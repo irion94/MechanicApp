@@ -11,6 +11,7 @@ import FormInput from "../../Components/Forms/FormInput";
 import {applicationColor} from "../../Styles/UniversalStyles";
 import brandModelStore from "../../Stores/BrandModelList_Store";
 import {loadRandomCarList} from "../../ObjectGenerator";
+import selectedCustomer_Store from "../../Stores/SelectedCustomer_Store";
 
 
 @observer
@@ -54,8 +55,7 @@ class KeyboardInput extends React.Component {
                     <Right/>
                 </Header>
             )
-        }
-
+        },
     });
 
 
@@ -66,10 +66,10 @@ class KeyboardInput extends React.Component {
 
     onChangeTextVehicle = (obj) => {
         console.log(obj)
-        createStore.setPersonalities(obj,'vehicle')
-        setTimeout( () => {
+        createStore.setPersonalities(obj, 'vehicle')
+        setTimeout(() => {
             this.setState({inlineInput: createStore.getPersonalities('vehicle', 'inline')})
-        },5000)
+        }, 5000)
 
     };
 
@@ -98,8 +98,8 @@ class KeyboardInput extends React.Component {
         }
     };
 
-    componentDidMount(){
-        brandModelStore.setBrandList().then( () => this.setState({array:brandModelStore.brandList}))
+    componentDidMount() {
+        brandModelStore.setBrandList().then(() => this.setState({array: brandModelStore.brandList}))
     }
 
     render() {
@@ -113,7 +113,7 @@ class KeyboardInput extends React.Component {
                                     <View>
                                         <FormInput navigation={this.props.navigation}
                                                    keys={['name', 'surname', 'phone', 'email']}
-                                                   searchByKeys={['vin','rej']}
+                                                   searchByKeys={['vin', 'rej']}
                                                    disabled={false}
                                                    onChangeText={this.onChangeTextPerson}
                                                    onSend={this.onSend}
@@ -124,20 +124,20 @@ class KeyboardInput extends React.Component {
                                     <View>
                                         <FormInput navigation={this.props.navigation}
                                                    keys={['brand', 'model', 'vin', 'rej']}
-                                                   searchByKeys={['vin','rej']}
+                                                   searchByKeys={['vin', 'rej']}
                                                    disabled={false}
                                                    onChangeText={this.onChangeTextVehicle}
                                                    onSend={this.onSend}
                                                    oneColumn={false}
                                                    pickerProps={{
-                                                       pickerKeys:['brand', 'model'],
-                                                       picker:{
+                                                       pickerKeys: ['brand', 'model'],
+                                                       picker: {
                                                            brand: {
-                                                               array:this.state.array,
+                                                               array: this.state.array,
                                                                keys: ['brand'],
                                                            },
-                                                           model:{
-                                                               array:  brandModelStore.getModelList(createStore.personalities.vehicle.brand),
+                                                           model: {
+                                                               array: brandModelStore.getModelList(createStore.personalities.vehicle.brand),
                                                                keys: ['model'],
                                                                //vehicleSelected: this.state.vehicleSelected.model
                                                            }
@@ -163,6 +163,14 @@ class KeyboardInput extends React.Component {
                                         primaryKey={'phone'}
                                         arrayLimiter={5}
                                         navigateTo={'Customer'}
+                                        navigateToProps={
+                                            {
+                                                labels: ['ID', 'Name', 'Surname', 'e-mail', 'Phone'],
+                                                keys: ['id', 'name', 'surname', 'email', 'phone'],
+                                                buttonTitle: 'More information',
+                                                listHeader: 'Vehicles List',
+                                            }
+                                        }
                                     />
                                     :
                                     <ReusableList
@@ -170,9 +178,16 @@ class KeyboardInput extends React.Component {
                                         setFilteredArray={vehicleList_Store.setFilteredArray}
                                         input={this.state.inlineInput}
                                         objectKeys={['brand', 'model', 'vin', 'rej']}
-                                        primaryKey={'vin'}
                                         arrayLimiter={5}
                                         navigateTo={'Vehicle'}
+                                        navigateToProps={
+                                            {
+                                                labels: ['ID', 'Make', 'Model', 'Year', 'VIN', 'REJ'],
+                                                keys: ['id', 'brand', 'model', 'year', 'vin', 'rej'],
+                                                buttonTitle: 'More Vehicle information',
+                                                listHeader: 'Repairs history'
+                                            }
+                                        }
                                     />
                             }
                         </ScrollView>

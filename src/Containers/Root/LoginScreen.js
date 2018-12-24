@@ -12,7 +12,11 @@ class LoginScreen extends React.Component <State, Props> {
         this.state = {
             mechanic: false,
             customer: true,
-            loading:true
+            loading:true,
+            login:{
+                username: '',
+                password: '',
+            }
         };
     }
 
@@ -30,7 +34,7 @@ class LoginScreen extends React.Component <State, Props> {
     };
 
     onPressButton = () => {
-        setTimeout(this.setState({loading:true},() => this.props.navigation.navigate('MechanicView')),3000)
+        this.setState({loading:true},() => this.props.navigation.navigate('MechanicView'))
     };
 
     fun(){
@@ -38,7 +42,7 @@ class LoginScreen extends React.Component <State, Props> {
     };
 
     componentWillMount(){
-        setTimeout(() => this.fun(), 5000)
+        this.fun()
     };
 
 
@@ -61,11 +65,11 @@ class LoginScreen extends React.Component <State, Props> {
                                     }}>
                                         <Item fixedLabel>
                                             <Label>Login</Label>
-                                            <Input/>
+                                            <Input onChangeText={(username) => this.setState({login:{username}})}/>
                                         </Item>
                                         <Item fixedLabel>
                                             <Label>Password</Label>
-                                            <Input secureTextEntry/>
+                                            <Input secureTextEntry onChangeText={(password) => this.setState({login:{password}})}/>
                                         </Item>
                                         <Item inlineLabel>
                                             <Label>Login as:</Label>

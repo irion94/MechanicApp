@@ -10,11 +10,38 @@ import KeyboardInput from "../Containers/Create/KeyboardInput";
 import CustomerScreen from "../Containers/Customer/CustomerScreen";
 import LoginScreen from "../Containers/Root/LoginScreen";
 import NewFirebase from "../Containers/Root/NewFirebase";
+import VehicleScreen from "../Containers/Vehicle/VehicleScreen";
+
+export const CustomerStack = createStackNavigator({ //login by customer!!
+        Customer: {screen: CustomerScreen},
+    },
+    {
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: applicationColor.header
+            }
+        }
+
+    }
+);
+
+/** ---------------------------------------------------------------------------------------------------------**/
+
+// const CustomerStack_MechanicView = createStackNavigator({
+//         Customer: CustomerScreen,
+//         Vehicle: VehicleScreen,
+//     },
+//     {
+//         navigationOptions: {
+//             tabBarVisible: false,
+//         }
+//     },
+// );
 
 const HomeStack = createStackNavigator({
         Home: {screen: HomeScreen},
         Option: {screen: OptionScreen},
-        Customer: {screen: CustomerScreen}
+        // Customer: {screen: CustomerStack_MechanicView}
         //Todo: {screen: TodoScreen},
         // TodoDetails: {screen: TodoListItemScreen},
         // NewRepair: {screen: New_repair},
@@ -29,35 +56,31 @@ const HomeStack = createStackNavigator({
     }
 );
 
-export const CustomerStack = createStackNavigator({
-        Customer: {screen: CustomerScreen},
-        Vehicle: {screen: OptionScreen}
-    }
-    ,
-    {
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: applicationColor.header
-            }
-        }
+HomeStack.navigationOptions = ({navigation}) => {
+    return {
+        tabBarVisible: navigation.state.index === 0,
+    };
+};
 
-    }
-);
 
-const CreateStack = createStackNavigator({
+export const CreateStack = createStackNavigator({
         Create: {screen: Create},
         KeyboardInput: {screen: KeyboardInput},
-        Customer: {screen: CustomerScreen}
+        Customer: {screen: CustomerScreen},
+        Vehicle: {screen: VehicleScreen},
     },
     {
         navigationOptions: {
-            headerStyle: {
-                height: 0
-            }
-        },
-
-    },
+            header: null,
+        }
+    }
 );
+
+CreateStack.navigationOptions = ({navigation}) => {
+    return {
+        tabBarVisible: navigation.state.index === 0,
+    };
+};
 
 
 export const MechanicStack = createBottomTabNavigator({
@@ -68,7 +91,7 @@ export const MechanicStack = createBottomTabNavigator({
             screen: SearchScreen,
         },
         Create: {
-            screen: CreateStack,
+            screen: CreateStack
         }
     },
     {
@@ -92,6 +115,7 @@ export const MechanicStack = createBottomTabNavigator({
                 color: applicationColor.header
             }
         }),
+
         initialRouteName: 'Home',
         tabBarOptions: {
             activeTintColor: applicationColor.activeTintColor,

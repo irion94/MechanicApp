@@ -1,20 +1,17 @@
 import React, {Component} from 'react'
 import {View} from 'react-native'
-import {Body, Button, Container, Content, Header, Icon, Left, List, Right, Text,} from "native-base";
+import {Body, Button, Container, Content, Header, Icon, Left, List, ListItem, Right, Text,} from "native-base";
 import {applicationColor, applicationFontSize} from "../../Styles/UniversalStyles";
 import {map} from 'ramda'
-import ReusableList from "../../Components/Lists/ReusableList";
 import FloatButton from "../../Components/Buttons/FloatButton";
-import vehicleList_Store from "../../Stores/VehicleList_Store";
-import selectedCustomer_Store from "../../Stores/SelectedCustomer_Store";
 import MyListItem from "../../Components/Lists/MyListItem";
 import PropTypes from 'prop-types'
 
-class CustomerScreen extends Component {
+class VehicleScreen extends Component {
 
     static navigationOptions = ({navigation}) => ({
         header: () => {
-            const {params = {hideTabBar: true}} = navigation.state;
+            const {params} = navigation.state;
             return (
                 <Header searchBar rounded style={{backgroundColor: applicationColor.header}}>
                     <Left>
@@ -30,7 +27,7 @@ class CustomerScreen extends Component {
                     </Left>
                     <Body>
                     <Text style={{fontWeight: '700', color: 'white'}}>
-                        Customer
+                        Vehicle
                     </Text>
                     </Body>
                     <Right/>
@@ -38,11 +35,6 @@ class CustomerScreen extends Component {
             )
         },
     });
-
-    componentWillMount() {
-        selectedCustomer_Store.setCustomer(this.props.navigation.state.params);
-        selectedCustomer_Store.setCustomersVehicles();
-    }
 
     render() {
         let params = this.props.navigation.state.params;
@@ -85,21 +77,9 @@ class CustomerScreen extends Component {
                 <Container>
                     <Content style={{height: '100%'}}>
                         <List>
-                            <ReusableList
-                                array={vehicleList_Store.getVehicleArray()}
-                                setFilteredArray={vehicleList_Store.setFilteredArray}
-                                objectKeys={['brand', 'model', 'vin', 'rej']}
-                                arrayLimiter={5}
-                                navigateTo={'Vehicle'}
-                                navigateToProps={
-                                    {
-                                        labels: ['ID', 'Make', 'Model', 'Year', 'VIN', 'REJ'],
-                                        keys: ['id', 'brand', 'model', 'year', 'vin', 'rej'],
-                                        buttonTitle: 'More Vehicle information',
-                                        listHeader: 'Repairs history'
-                                    }
-                                }
-                            />
+                            <ListItem>
+                                <MyListItem label={'Todolist'} value={'Value'}/>
+                            </ListItem>
                         </List>
                     </Content>
                 </Container>
@@ -109,17 +89,17 @@ class CustomerScreen extends Component {
     }
 }
 
-CustomerScreen.propTypes = {
+VehicleScreen.propTypes = {
     objectKeys: PropTypes.array.isRequired,
     labels: PropTypes.array.isRequired,
     buttonTitle: PropTypes.string.isRequired,
 };
 
-CustomerScreen.defaultProps = {
+VehicleScreen.defaultProps = {
     objectKeys: [],
     labels: [],
     buttonTitle: '',
     headerTitle: ''
 }
 
-export default CustomerScreen
+export default VehicleScreen

@@ -1,13 +1,26 @@
 import * as React from 'react'
 import {Image, TouchableOpacity, View} from 'react-native';
-import {Body, Card, CardItem, Container, Left, Text} from 'native-base';
+import {Body, Button, Card, CardItem, Container, Header, Icon, Left, Right, Text} from 'native-base';
 import keyboard from 'src/images/keyboard.gif'
 import scan from 'src/images/scan.gif'
+import {applicationColor} from "../../Styles/UniversalStyles";
+import createStore from "../../Stores/Create_store";
 
 export default class Create extends React.Component {
     constructor(props: any) {
         super(props);
     }
+
+    static navigationOptions = ({navigation}) => ({
+        header: () => {
+            const {params = {title: 'Personal Inf'}} = navigation.state;
+            return (
+                <Header style={{height:1}}>
+
+                </Header>
+            )
+        },
+    });
 
     render() {
         return (
