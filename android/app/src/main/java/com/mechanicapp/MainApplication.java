@@ -3,6 +3,8 @@ package com.mechanicapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactlibrary.SGScanditPackage;
+import com.scandit.reactnative.ScanditPackage;
 import com.rnfs.RNFSPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.rnscreens.RNScreensPackage;
@@ -27,6 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SGScanditPackage(),
+            new ScanditPackage(),
             new RNFSPackage(),
             new VectorIconsPackage(),
             new RNScreensPackage(),

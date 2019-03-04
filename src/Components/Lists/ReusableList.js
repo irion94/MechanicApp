@@ -8,30 +8,44 @@
  */
 
 import * as React from 'react'
-import {List, ListItem} from "react-native-elements";
-import {map} from 'ramda'
+import {List} from "react-native-elements";
+import {ListItem, Left, Body, Right, Text, View} from 'native-base'
+import * as R from 'ramda'
 import searchInArray from 'src/Utilities/FuseJS'
 import PropTypes from 'prop-types'
 import {withNavigation} from 'react-navigation'
+import {Grid, Col, Row} from 'react-native-easy-grid'
 
 const uuid = require('uuid/v4');
 
 const ReusableList = (props) => {
-    let {array, input, objectKeys, arrayLimiter, setFilteredArray, navigateTo, navigateToProps} = props;
+    let {array, input, objectKeys, arrayLimiter, setFilteredArray, navigateTo, navigateToProps, col} = props;
     console.log(props)
 
     const onResearch = () => {
         let filteredArray;
+        let keys = R.pipe(
+            R.map(R.pick(["key"])),
+            R.pluck("key"),
+            //R.flatten
+        )(objectKeys)
+        console.log(keys)
         if (arrayLimiter) {
-            filteredArray = searchInArray(objectKeys, input, array).slice(0, arrayLimiter);
+            filteredArray = searchInArray(keys, input, array).slice(0, arrayLimiter);
         }
         else {
-            filteredArray = searchInArray(objectKeys, input, array)
+            filteredArray = searchInArray(keys, input, array)
         }
+
+        console.log(filteredArray)
 
         setFilteredArray(filteredArray);
         return filteredArray;
     };
+
+    const onFound = (object) => {
+        return arr[0] === object && input.length > 5 ? {color: 'red'} : {}
+    }
 
     let arr = onResearch();
 
@@ -42,27 +56,87 @@ const ReusableList = (props) => {
     // promise.then((x) => console.log(x));
 
     return (
-        <List>
+        <List containerStyle={{width: '100%'}}>
+            {/*{*/}
+            {/*map((object) => (*/}
+            {/*<ListItem*/}
+            {/*titleStyle={arr[0] === object && input.length > 5 ? {color: 'red'} : {color: 'black'}}*/}
+            {/*onPress={() => props.navigation.navigate({*/}
+            {/*routeName: navigateTo,*/}
+            {/*params: {...navigateToProps, ...object},*/}
+            {/*key: uuid()*/}
+            {/*}*/}
+            {/*)}*/}
+            {/*titleNumberOfLines={5}*/}
+            {/*key={object.id}*/}
+            {/*title={*/}
+            {/*map( (item) => {*/}
+            {/*return item.label + ':   ' + object[item.key] + '\n'*/}
+            {/*}*/}
+            {/*, objectKeys).join('')*/}
+            {/*}*/}
+            {/*textInputValue={"lol"}*/}
+            {/*/>*/}
+            {/*), input === ''*/}
+            {/*?*/}
+            {/*arrayLimiter ? array.slice(0, arrayLimiter) : array*/}
+            {/*:*/}
+            {/*arr)*/}
+            {/*}*/}
             {
-                map((object) => (
-                    <ListItem
-                        titleStyle={arr[0] === object && input.length > 5 ? {color: 'red'} : {color: 'black'}}
+                R.map(object => {
+                    return <ListItem
                         onPress={() => props.navigation.navigate({
                                 routeName: navigateTo,
                                 params: {...navigateToProps, ...object},
                                 key: uuid()
                             }
                         )}
-                        titleNumberOfLines={5}
-                        key={object.id}
-                        title={
-                            map(item => {
-                                    return item.charAt(0).toUpperCase() + item.slice(1) + ': ' + object[item] + '\n'
-                                }
-                                , objectKeys).join('')
+                        key={object._id}
+                        style={[{flex: 1}, arr[0] === object && input.length > 5 ? {backgroundColor: 'rgba(238, 63, 63, 0.21)'} : {}]}
+                        //selected={arr[0] === object && input.length > 5}
+                        //style={arr[0] === object && input.length > 5 ? {backgroundColor: 'red', opacity: 0.5} : {}}
+                    >
+                        <Body>
+                        {
+                            col ? (
+                                    <Grid>
+                                        {
+                                            R.map((item) => (
+                                                <Row
+                                                    style={{fontSize: 10, height: 20}}
+                                                    key={item.key}
+                                                >
+                                                    <Col>
+                                                        <Text note>{item.label + ':\n'}</Text>
+                                                    </Col>
+                                                    <Col>
+                                                        <Text>{object[item.key] + '\n'}</Text>
+                                                    </Col>
+                                                </Row>
+
+
+                                            ), objectKeys)
+                                        }
+                                    </Grid>
+                                ) :
+
+                                R.map((item) => (
+                                    <View
+                                        style={{fontSize: 10}}
+                                        key={item.key}
+                                    >
+                                        <Text note>{item.label + ':\n'}</Text>
+                                        <Text>{object[item.key] + '\n'}</Text>
+                                    </View>
+
+
+                                ), objectKeys)
+
                         }
-                    />
-                ), input === ''
+                        </Body>
+                    </ListItem>
+                }, input === ''
                     ?
                     arrayLimiter ? array.slice(0, arrayLimiter) : array
                     :
@@ -84,12 +158,14 @@ ReusableList.propTypes = {
     arrayLimiter: PropTypes.number,
     alertFirst: PropTypes.bool,
     navigateTo: PropTypes.any,
-    navigateToProps: PropTypes.object
+    navigateToProps: PropTypes.object,
+    col: PropTypes.bool
 };
 
 ReusableList.defaultProps = {
     arrayLimiter: 0,
     input: '',
     alertFirst: false,
-    navigateToProps: {}
+    navigateToProps: {},
+    col: true
 };

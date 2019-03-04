@@ -1,47 +1,42 @@
 import * as React from 'react'
-import {Image, TouchableOpacity, View, Picker} from "react-native";
-import {makeGenerator} from "../../ObjectGenerator";
+import {Alert, AppState, Text, TouchableOpacity, View} from "react-native";
+import {Button} from "native-base"
+import axios from 'axios'
+
+import withNavigation from "react-navigation/src/views/withNavigation";
 
 class OptionScreen extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state = {
-            selected:{
-                brand: "Audi"
-            }
-        }
     }
 
-    onChangeValue = (obj) =>{
-        this.setState({selected:obj});
-        console.log(this.state, obj)
-    }
 
     render() {
-        let array = makeGenerator();
-        return (
-            <View style={{flex: 1}}>
-                <View style={{flexDirection: 'row'}}>
-                    <TouchableOpacity style={{width: 50, height: 50}}>
-                        <Image
-                            source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX8wezdDj-dV6lKgG8Dw00xe4BijUXNN7yiyKO_uR5pykNVb6T_g'}}
-                            style={{height: '30%', width: '100%', flex: 1}}
-                        />
-                    </TouchableOpacity>
-                </View>
 
-                <Picker
-                    mode={'dialog'}
-                    selectedValue={this.state.language}
-                    style={{ height: 50, width: 100 }}
-                    onValueChange={(itemValue, itemIndex) => this.setState({language: itemValue})}>
-                    <Picker.Item label="Java" value="java" />
-                    <Picker.Item label="JavaScript" value="js" />
-                </Picker>
+        return (
+            <View style={{flex: 1, alignItems: 'center'}}>
+
+                <TouchableOpacity
+                    style={{
+                        backgroundColor: 'blue',
+                        height: 50,
+                        width: '100%',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Text style={{textAlign: 'center'}}> Przycisk </Text>
+                </TouchableOpacity>
+
+
+                <Button full onPress={() => axios.get('http://localhost:3000/users/logout').then(() => this.props.navigation.navigate('Login'))}>
+                    <Text> Przycisk </Text>
+                </Button>
+
+
             </View>
         );
     }
 }
 
 
-export default (OptionScreen)
+export default withNavigation(OptionScreen)

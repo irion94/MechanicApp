@@ -4,14 +4,12 @@ import {Body, Button, Container, Header, Icon, Left, Right, Text} from "native-b
 import {observer} from "mobx-react";
 import {Grid, Row} from "react-native-easy-grid";
 import createStore from 'src/Stores/Create_store'
-import customerList_Store from "../../Stores/CustomerList_Store";
-import vehicleList_Store from "../../Stores/VehicleList_Store";
+import customerList_Store from "../../Stores/dbData/CustomerList_Store";
+import vehicleList_Store from "../../Stores/dbData/VehicleList_Store";
 import ReusableList from "../../Components/Lists/ReusableList";
 import FormInput from "../../Components/Forms/FormInput";
 import {applicationColor} from "../../Styles/UniversalStyles";
-import brandModelStore from "../../Stores/BrandModelList_Store";
-import {loadRandomCarList} from "../../ObjectGenerator";
-import selectedCustomer_Store from "../../Stores/SelectedCustomer_Store";
+import brandModelStore from "../../Stores/dbData/BrandModelList_Store";
 
 
 @observer
@@ -159,14 +157,19 @@ class KeyboardInput extends React.Component {
                                         array={customerList_Store.getCustomerArray()}
                                         setFilteredArray={customerList_Store.setFilteredArray}
                                         input={this.state.inlineInput}
-                                        objectKeys={['name', 'surname', 'email', 'phone']}
+                                        objectKeys={[
+                                            {label:'Name', key:'imieWlascicielaPojazdu'},
+                                            {label:'Surname', key:'nazwiskoWlascicielaPojazdu'},
+                                            {label:'Full name', key:'nazwaWlascicielaPojazdu'},
+                                            {label:'Phone', key:'numerTelefonu'},
+                                            {label:'e-mail', key:'email'}]}
                                         primaryKey={'phone'}
                                         arrayLimiter={5}
                                         navigateTo={'Customer'}
                                         navigateToProps={
                                             {
-                                                labels: ['ID', 'Name', 'Surname', 'e-mail', 'Phone'],
-                                                keys: ['id', 'name', 'surname', 'email', 'phone'],
+                                                labels: ['First Name:', 'Surname:', 'Full name:', 'Phone:', 'e-mail:'],
+                                                keys: ['imieWlascicielaPojazdu', 'nazwiskoWlascicielaPojazdu', 'nazwaWlascicielaPojazdu','numerTelefonu', 'email'],
                                                 buttonTitle: 'More information',
                                                 listHeader: 'Vehicles List',
                                             }

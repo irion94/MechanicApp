@@ -137,6 +137,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-scandit')
+    compile project(':scandit-react-native')
     compile project(':react-native-fs')
     compile project(':react-native-vector-icons')
     compile project(':react-native-screens')

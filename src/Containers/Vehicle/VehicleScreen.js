@@ -1,11 +1,12 @@
 import React, {Component} from 'react'
-import {View} from 'react-native'
+import {View, FlatList} from 'react-native'
 import {Body, Button, Container, Content, Header, Icon, Left, List, ListItem, Right, Text,} from "native-base";
 import {applicationColor, applicationFontSize} from "../../Styles/UniversalStyles";
 import {map} from 'ramda'
 import FloatButton from "../../Components/Buttons/FloatButton";
 import MyListItem from "../../Components/Lists/MyListItem";
 import PropTypes from 'prop-types'
+import ReusableList from "../../Components/Lists/ReusableList";
 
 class VehicleScreen extends Component {
 
@@ -36,9 +37,21 @@ class VehicleScreen extends Component {
         },
     });
 
+    dateFormatChange(date){
+        const dateOptions = { day: 'numeric', month: 'numeric', year: 'numeric', hour:'numeric', minute:'numeric'};
+        return new Date(date).toLocaleString(dateOptions);
+    }
+
+    componentWillMount(){
+        let params = this.props.navigation.state.params;
+        map(date => date.created_at = this.dateFormatChange(date.created_at), params.repairsHistory)
+    }
+
+
     render() {
         let params = this.props.navigation.state.params;
-        let {labels, keys, buttonTitle, listHeader} = params;
+        let {labels, keys, buttonTitle, listHeader, repairsHistory} = params;
+
         console.log(params);
         return (
             <View style={{justifyContent: 'center', flexDirection: 'column', height: '100%'}}>
@@ -75,11 +88,23 @@ class VehicleScreen extends Component {
                     <Text style={{fontSize: applicationFontSize.medium}}>{listHeader}</Text>
                 </Button>
                 <Container>
-                    <Content style={{height: '100%'}}>
+                    <Content style={{height: '100%', width: '100%'}}>
                         <List>
-                            <ListItem>
-                                <MyListItem label={'Todolist'} value={'Value'}/>
-                            </ListItem>
+                            <ReusableList
+                                array={repairsHistory}
+                                setFilteredArray={() => {}}
+                                objectKeys={[{key:'created_at', label: 'Created at'}]}
+                                //arrayLimiter={5}
+                                navigateTo={'RepairHistory'}
+                                navigateToProps={
+                                    {
+                                        labels: ['Created at:', 'Finished:'],
+                                        keys: ['created_at', 'finished'],
+                                        //buttonTitle: 'More Vehicle information',
+                                        listHeader: 'Repairs history'
+                                    }
+                                }
+                            />
                         </List>
                     </Content>
                 </Container>

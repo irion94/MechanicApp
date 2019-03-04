@@ -151,3 +151,75 @@ let loadRandomTodoObject = () => {
     }
     return array;
 }
+
+export let createDatabaseObject = () => {
+    let result = {};
+
+    let vehicleInformation = map(item => {return {[item]: faker.name.firstName()}}, vehicle)
+
+    let vehicleOwnerInformation = map(item => {return {[item]: faker.name.firstName()}}, vehicleOwner)
+
+    let documentOwnerInformation = map(item => {return {[item]: faker.name.firstName()}}, documentOwner)
+
+    let otherInformation = map(item => {return {[item]: faker.name.firstName()}}, requireInformation)
+
+    result = {vehicleInformation,vehicleOwnerInformation, documentOwnerInformation, otherInformation}
+
+    console.log(result)
+
+}
+
+let vehicle = [
+    "markaPojazdu",
+    "modelPojazdu",
+    "numerRejestracyjnyPojazdu",
+    "numerIdentyfikacyjnyPojazdu",
+    //"wariantPojazdu",
+    "wersjaPojazdu",
+    //"typPojazdu",
+    "rokProdukcji",
+    "pojemnoscSilnikaCm3",
+    "maksymalnaMocNettoSilnikaKW",
+    //"masaWlasnaPojazduKg",
+    //"rodzajPojazdu",
+    // "liczbaMiejscSiedzacych",
+    // "liczbaMiejscStojacych",
+    "rodzajPaliwa",
+    // "przeznaczenie",
+    // "dopuszczalnaLadownosc",
+    "dataPierwszejRejestracjiPojazdu",
+];
+let vehicleOwner = [
+    "pelneNazwiskoLubNazwaWlascicielaPojazdu",
+    "imieWlascicielaPojazdu",
+    "nazwiskoWlascicielaPojazdu",
+    "nazwaWlascicielaPojazdu",
+    "numerPESELLubREGONWlascicielaPojazdu",
+    "kodPocztowyWlascicielaPojazdu",
+    "miejscowoscWlascicielaPojazdu",
+    "gminaWlascicielaPojazdu",
+    "ulicaWlascicielaPojazdu",
+    "nrDomuWlascicielaPojazdu",
+    "nrMieszkaniaWlascicielaPojazdu",
+    "phoneNumber",
+    "email"
+];
+
+let documentOwner = [
+    "pelneNazwiskoLubNazwaPosiadaczaDowoduRejestracyjnego",
+    "imiePosiadaczaDowoduRejestracyjnego",
+    "nazwiskoPosiadaczaDowoduRejestracyjnego",
+    "nazwaPosiadaczaDowoduRejestracyjnego",
+    "numerPESELLubREGONPosiadaczaDowoduRejestracyjnego",
+    "kodPocztowyPosiadaczaDowoduRejestracyjnego",
+    "miejscowoscPosiadaczaDowoduRejestracyjnego",
+    "gminaPosiadaczaDowoduRejestracyjnego",
+    "ulicaPosiadaczaDowoduRejestracyjnego",
+    "nrDomuPosiadaczaDowoduRejestracyjnego",
+    "nrMieszkaniaPosiadaczaDowoduRejestracyjnego",
+];
+
+let requireInformation = [
+    "phoneNumber",
+    "email"
+]

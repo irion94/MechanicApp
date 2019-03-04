@@ -1,9 +1,12 @@
 import * as React from 'react'
-import {ImageBackground, TouchableOpacity, View, StyleSheet} from 'react-native'
+import {ImageBackground, TouchableOpacity, View, StyleSheet, Alert} from 'react-native'
 import {Button, CheckBox, Container, Content, Form, Input, Item, Label, List, Spinner, Text} from "native-base";
 import Row from "react-native-easy-grid/Components/Row";
 import Grid from "react-native-easy-grid/Components/Grid";
 import wallpaper from 'src/images/wallpaper2.jpg'
+import axios from 'axios'
+import sessionStore from 'src/Stores/dbData/SessionStore'
+import {fetchClientData} from "../../api/ApiUtils";
 
 
 class LoginScreen extends React.Component <State, Props> {
@@ -12,10 +15,13 @@ class LoginScreen extends React.Component <State, Props> {
         this.state = {
             mechanic: false,
             customer: true,
-            loading:true,
-            login:{
-                username: '',
-                password: '',
+            loading: true,
+
+            email: '',
+            password: '',
+            login: {
+                email: 'tomasz@wp.pl',
+                password: 'lol123',
             }
         };
     }
@@ -34,20 +40,40 @@ class LoginScreen extends React.Component <State, Props> {
     };
 
     onPressButton = () => {
-        this.setState({loading:true},() => this.props.navigation.navigate('MechanicView'))
+        this.setState({loading: true});
+        console.log(this.state.login);
+        ///axios.get('http://localhost:3000/users/', {
+        axios.get('https://mechanicappserver.herokuapp.com/users/', {
+            params: {
+                email: this.state.login.email,
+                password: this.state.login.password
+            }
+        })
+            .then(
+                (response) => {
+                    const userData = response.data;
+                    sessionStore.setId(userData);
+                    //TODO: rzuć tu do bazy to wszystko pobierze sie przy jednym loadingu
+                    fetchClientData()
+                        .then(this.setState({loading: false}, () => this.props.navigation.navigate('MechanicView')))
+                        .catch(error => Alert.alert(error));
+                }
+            )
+            .catch(error => Alert.alert('error' + error))
+            .then(() => this.setState({loading: false}))
     };
 
-    fun(){
-        this.setState({loading:false})
+    fun() {
+        this.setState({loading: false})
     };
 
-    componentWillMount(){
+    componentWillMount() {
         this.fun()
     };
 
 
     render() {
-        if(!this.state.loading) {
+        if (!this.state.loading) {
             return (
                 <Container>
                     <ImageBackground
@@ -65,11 +91,16 @@ class LoginScreen extends React.Component <State, Props> {
                                     }}>
                                         <Item fixedLabel>
                                             <Label>Login</Label>
-                                            <Input onChangeText={(username) => this.setState({login:{username}})}/>
+                                            <Input onChangeText={(username) => {
+                                                console.log(username)
+                                                this.setState({email: username})
+                                            }
+                                            }/>
                                         </Item>
                                         <Item fixedLabel>
                                             <Label>Password</Label>
-                                            <Input secureTextEntry onChangeText={(password) => this.setState({login:{password}})}/>
+                                            <Input secureTextEntry
+                                                   onChangeText={(password) => this.setState({password: password})}/>
                                         </Item>
                                         <Item inlineLabel>
                                             <Label>Login as:</Label>
@@ -100,7 +131,8 @@ class LoginScreen extends React.Component <State, Props> {
                                             </List>
                                         </Item>
                                         <Button
-                                            onPress={() => this.onPressButton()}
+                                            // onPress={() => this.onPressButton()}
+                                            onPress={this.onPressButton()}
                                             style={{
                                                 borderBottomRightRadius: 10,
                                                 borderBottomLeftRadius: 10,
@@ -117,7 +149,8 @@ class LoginScreen extends React.Component <State, Props> {
                             <Row size={10}>
                                 <Content>
                                     <Button transparent full onPress={() => this.props.navigation.navigate('Create')}>
-                                        <Text style={[{alignItems: 'center'}, styles.colors]}>Create new Firebase for Your
+                                        <Text style={[{alignItems: 'center'}, styles.colors]}>Create new Firebase for
+                                            Your
                                             company</Text>
                                     </Button>
                                 </Content>
@@ -127,10 +160,10 @@ class LoginScreen extends React.Component <State, Props> {
                 </Container>
             )
         }
-        else{
-            return(
-                <Container style={{alignItems:'center', justifyContent:'center', flex:1}}>
-                        <Spinner color={'black'} />
+        else {
+            return (
+                <Container style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+                    <Spinner color={'black'}/>
                 </Container>
             )
         }
@@ -138,7 +171,7 @@ class LoginScreen extends React.Component <State, Props> {
 }
 
 const styles = StyleSheet.create({
-    colors:{
+    colors: {
         color: '#43464B'
     }
 })

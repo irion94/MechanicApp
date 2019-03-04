@@ -5,12 +5,16 @@ import {applicationColor, applicationFontSize} from "../../Styles/UniversalStyle
 import {map} from 'ramda'
 import ReusableList from "../../Components/Lists/ReusableList";
 import FloatButton from "../../Components/Buttons/FloatButton";
-import vehicleList_Store from "../../Stores/VehicleList_Store";
+import vehicleList_Store from "../../Stores/dbData/VehicleList_Store";
 import selectedCustomer_Store from "../../Stores/SelectedCustomer_Store";
 import MyListItem from "../../Components/Lists/MyListItem";
 import PropTypes from 'prop-types'
 
 class CustomerScreen extends Component {
+
+    state = {
+        filteredArray: []
+    }
 
     static navigationOptions = ({navigation}) => ({
         header: () => {
@@ -40,8 +44,8 @@ class CustomerScreen extends Component {
     });
 
     componentWillMount() {
-        selectedCustomer_Store.setCustomer(this.props.navigation.state.params);
-        selectedCustomer_Store.setCustomersVehicles();
+        //selectedCustomer_Store.setCustomer(this.props.navigation.state.params);
+        //selectedCustomer_Store.setCustomersVehicles();
     }
 
     render() {
@@ -86,15 +90,19 @@ class CustomerScreen extends Component {
                     <Content style={{height: '100%'}}>
                         <List>
                             <ReusableList
-                                array={vehicleList_Store.getVehicleArray()}
-                                setFilteredArray={vehicleList_Store.setFilteredArray}
-                                objectKeys={['brand', 'model', 'vin', 'rej']}
+                                array={params.vehicleList}
+                                setFilteredArray={() => {}}
+                                objectKeys={[
+                                    {label:'Make', key:'markaPojazdu'},
+                                    {label:'Model', key:'modelPojazdu'},
+                                    {label:'VIN', key:'numerIdentyfikacyjnyPojazdu'},
+                                    {label:'Reg', key:'numerRejestracyjnyPojazdu'}]}
                                 arrayLimiter={5}
                                 navigateTo={'Vehicle'}
                                 navigateToProps={
                                     {
-                                        labels: ['ID', 'Make', 'Model', 'Year', 'VIN', 'REJ'],
-                                        keys: ['id', 'brand', 'model', 'year', 'vin', 'rej'],
+                                        labels: ['Make', 'Model', 'VIN', 'Reg.'],
+                                        keys: ['markaPojazdu', 'modelPojazdu', 'numerIdentyfikacyjnyPojazdu', 'numerRejestracyjnyPojazdu'],
                                         buttonTitle: 'More Vehicle information',
                                         listHeader: 'Repairs history'
                                     }

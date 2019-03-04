@@ -2,18 +2,42 @@ import {action, autorun, observable} from "mobx";
 import {map} from 'ramda'
 
 class Create_store {
+    @observable PersonalitiesKeyboard = {
+
+    }
+
     @observable personalities = {
-        person: {},
-        vehicle: {},
+        vehicleOwnerData: [],
+        vehicleData: [],
+        documentOwnerData: [],
+        requireData: [],
+
+        person:{},
+        vehicle:{
+            brand: "Acura",
+            model: null
+        }
     };
+
+    @observable databaseFound = {
+        person: false,
+        vehicle: false
+    };
+
     @observable visible: true;
+
+    @action changePersonalitiesValue = (input, personalitiesKey ,objectKey) => {
+        console.log('store:',createStore.personalities[personalitiesKey][0])
+        this.personalities[personalitiesKey][objectKey].value = input
+    }
 
     @action reset = (key) => {
         this.personalities[key] = {}
     };
 
     @action setPersonalities = (input, key) => {
-        this.personalities[key] = {...this.personalities[key] ,...input};
+        console.log('storePersonalities',input)
+        this.personalities[key] = input;
     };
 
     @action setVisible = () => {
@@ -34,6 +58,6 @@ class Create_store {
 
 
 let createStore = new Create_store();
-autorun(() => console.log(createStore.personalities));
+autorun(() => console.log(createStore.personalities['vehicleData']));
 
 export default createStore;

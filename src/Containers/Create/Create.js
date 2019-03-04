@@ -30,7 +30,7 @@ export default class Create extends React.Component {
                         text={"Scan AZTEC code to join new customer."}
                         note={"AZTEC code is located on every vehicle docs."}
                         image={scan}
-                        navigate={'KeyboardInput'}
+                        navigate={'Scanner'}
                         navigation={this.props.navigation}
                     />
                     <CreateCard

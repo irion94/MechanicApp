@@ -11,6 +11,10 @@ import CustomerScreen from "../Containers/Customer/CustomerScreen";
 import LoginScreen from "../Containers/Root/LoginScreen";
 import NewFirebase from "../Containers/Root/NewFirebase";
 import VehicleScreen from "../Containers/Vehicle/VehicleScreen";
+import RepairHistoryScreen from "../Containers/RepairHistory/RepairHistoryScreen";
+import Viewer from "../Components/Viewer";
+import Scanner from "../Containers/Create/Scanner";
+import TodoCreator from "../Containers/Create/TodoCreator";
 
 export const CustomerStack = createStackNavigator({ //login by customer!!
         Customer: {screen: CustomerScreen},
@@ -41,6 +45,8 @@ export const CustomerStack = createStackNavigator({ //login by customer!!
 const HomeStack = createStackNavigator({
         Home: {screen: HomeScreen},
         Option: {screen: OptionScreen},
+        Viewer: {screen: Viewer},
+        TodoCreator: {screen: TodoCreator}
         // Customer: {screen: CustomerStack_MechanicView}
         //Todo: {screen: TodoScreen},
         // TodoDetails: {screen: TodoListItemScreen},
@@ -66,8 +72,10 @@ HomeStack.navigationOptions = ({navigation}) => {
 export const CreateStack = createStackNavigator({
         Create: {screen: Create},
         KeyboardInput: {screen: KeyboardInput},
+        Scanner: {screen: Scanner},
         Customer: {screen: CustomerScreen},
         Vehicle: {screen: VehicleScreen},
+        RepairHistory: {screen: RepairHistoryScreen}
     },
     {
         navigationOptions: {
@@ -113,7 +121,7 @@ export const MechanicStack = createBottomTabNavigator({
             },
             header: {
                 color: applicationColor.header
-            }
+            },
         }),
 
         initialRouteName: 'Home',
