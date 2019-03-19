@@ -1,7 +1,7 @@
 import {action, observable} from "mobx";
 import {loadRandomOwnerList} from "../../ObjectGenerator";
 
-class CustomerList_Store {
+class CustomerStore {
     @observable customerArray = [{}];
     @observable filteredArray = [{}];
 
@@ -23,5 +23,5 @@ class CustomerList_Store {
 
 }
 
-let customerList_Store = new CustomerList_Store();
-export default customerList_Store;
+let customerStore = new CustomerStore();
+export default customerStore;

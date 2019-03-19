@@ -3,6 +3,7 @@ package com.mechanicapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import fr.snapp.imagebase64.RNImgToBase64Package;
 import com.reactlibrary.SGScanditPackage;
 import com.scandit.reactnative.ScanditPackage;
 import com.rnfs.RNFSPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNImgToBase64Package(),
             new SGScanditPackage(),
             new ScanditPackage(),
             new RNFSPackage(),

@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -79,6 +78,7 @@
 		F6921344079446449C2BA399 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D65A850FC7A04FCE95099B81 /* Feather.ttf */; };
 		FB6AFB67E01045389986776E /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4EC9D09F53B40B18811A6A4 /* FontAwesome5_Brands.ttf */; };
 		FD543251D1BF4671BEF7E8F3 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 456AEE1C84574A5BB376CA51 /* Roboto_medium.ttf */; };
+		12D0842903DA4FF68D852423 /* libRNImgToBase64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5524709E9ECF4E849832A9D7 /* libRNImgToBase64.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -481,6 +481,8 @@
 		E77FFBA3DC4E43A3937B33AD /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		E7DD0DD85A784593B9896DA5 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		ED52F5C5BC924C9D8510B8E1 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
+		864E88AC0F15426EBF8295AD /* RNImgToBase64.xcodeproj */ = {isa = PBXFileReference; name = "RNImgToBase64.xcodeproj"; path = "../node_modules/react-native-image-base64/ios/RNImgToBase64.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		5524709E9ECF4E849832A9D7 /* libRNImgToBase64.a */ = {isa = PBXFileReference; name = "libRNImgToBase64.a"; path = "libRNImgToBase64.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -530,6 +532,7 @@
 				F119D453D518408AA46B980A /* libRNVectorIcons.a in Frameworks */,
 				3E0509B9E2C34540B442E0C9 /* libRNFS.a in Frameworks */,
 				B402C8712FB741F290FE1A29 /* libSGScandit.a in Frameworks */,
+				12D0842903DA4FF68D852423 /* libRNImgToBase64.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -802,6 +805,7 @@
 				6EA640C9228B4C7B952DDE43 /* RNFS.xcodeproj */,
 				D67069906302438380FAFE36 /* RCTScanditBarcodeScanner.xcodeproj */,
 				58CB075A487746C892108738 /* SGScandit.xcodeproj */,
+				864E88AC0F15426EBF8295AD /* RNImgToBase64.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1544,12 +1548,14 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = MechanicAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1580,12 +1586,14 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = MechanicAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1622,6 +1630,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = MechanicApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1655,6 +1664,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = MechanicApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1690,11 +1700,13 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = "MechanicApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1734,11 +1746,13 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = "MechanicApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1777,11 +1791,13 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = "MechanicApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1820,11 +1836,13 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/scandit-react-native/ios/ScanditBarcodeScanner/**",
 					"$(SRCROOT)/../node_modules/react-native-scandit/ios",
+					"$(SRCROOT)/../node_modules/react-native-image-base64/ios",
 				);
 				INFOPLIST_FILE = "MechanicApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

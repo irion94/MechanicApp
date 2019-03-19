@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-base64')
     compile project(':react-native-scandit')
     compile project(':scandit-react-native')
     compile project(':react-native-fs')

@@ -4,7 +4,11 @@ import {Barcode, BarcodePicker, ScanditModule, ScanSettings} from 'scandit-react
 import withNavigation from "react-navigation/src/views/withNavigation";
 import {scanditKey} from 'src/Utilities/config'
 import * as R from "ramda";
-import createStore from "../../Stores/Create_store";
+import createStore from "../../Stores/ScannerStore";
+import {vehicleKeys, vehicleOwner, requireInformation, documentOwner} from 'src/Utilities/databaseKeys'
+import Owner from "../../Stores/Owner";
+import Vehicle from "../../Stores/Vehicle";
+import Loading from "../../Components/Loading";
 
 const tmp = '6wMAANtYAAJDAP8xAHwAQgBBAL9LEjQANd0AMw6uBjAq0w4y3zISUwC/VEJSAE9uEyDtYhpa3QBFHq9uSUJ19wBsAC4utUc6Aa9KV0ZDfTNF7yJPLjV9zzP7mi0AOKrYMIe7Tzr3fABLJ7cyOQBOe1I5It1IMr4WRABBAHzdA0PvqlYGQ3ZOpoMsZrsgbj5BVE/vSAJNdop67zcANs+4VQY3ozgAOX2jMu0fai3eADAL1xY1Kr4tA3wPE1p7ZkKqzlTX8kUavVMmIPcbQbqxfDNbf0g0VzUeBzjdBzP4HjcAOGsPDCveSn8da07DAEmfbCcDTTh1u1DhLkzwa0F7nzGnwXcVEi0LNdgAMBMxQycxbSelI4UPGDdym9Q3i+dBOYbbLD+1Nhf3UAAgQ48jRzcT5Tf2NAB8zw5THjMKYkM+qtMOpiCeA9AGQnu7WdsGy5cjTTiM2xfWYQBy9wB0AHl++24AaQBlDt53GmTtLh5veEIwPccx4V/W1zADu3wj6ny2EyeWA2ROLZszOQvtMpuwJkkkkklQ/wM=u'
 
@@ -14,27 +18,40 @@ ScanditModule.setAppKey(scanditKey);
 class Scanner extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            loading: false
+        }
+    }
+
+    _alg(keys, array){
+        return R.pipe(
+            R.pickBy((value, key) => R.contains(key, keys)),
+            R.map(R.prop('value'))
+        )(array)
     }
 
     setStore(result){
-        let vehicleOwnerData = R.map( item => result[item] ,vehicleOwner);
+        let vehicleOwnerData = this._alg(vehicleOwner,result);
+        let vehicleData = this._alg(vehicleKeys, result);
+
         let documentOwnerData = R.map( item => result[item] ,documentOwner);
-        let vehicleData = R.map( item => result[item], vehicle);
         let requireData = R.map( item => result[item], requireInformation);
-        console.log("result",requireData)
 
+        let owner = new Owner(vehicleOwnerData);
+        let vehicle = new Vehicle(vehicleData);
 
-        createStore.setPersonalities(Object.values(vehicleOwnerData), 'vehicleOwnerData');
-        createStore.setPersonalities(Object.values(documentOwnerData),'documentOwnerData');
-        createStore.setPersonalities(Object.values(vehicleData),'vehicleData');
-        createStore.setPersonalities(Object.values(requireData),'requireData');
+        createStore.setPersonalities(owner, 'vehicleOwnerData');
+        createStore.setPersonalities(documentOwnerData,'documentOwnerData');
+        createStore.setPersonalities(vehicle,'vehicleData');
+        createStore.setPersonalities(requireData,'requireData');
     }
 
-    onScan(session) {
-        const decoder = new PolishVehicleRegistrationCertificateDecoder(session.newlyRecognizedCodes[0].data + " " + session.newlyRecognizedCodes[0].symbology);
-        this.setStore(decoder.data);
-        this.props.navigation.navigate('Viewer')
-        //this.props.navigation.navigate('Viewer', {result: decoder.data})
+     onScan(session) {
+        this.setState({loading: true}, () => {
+            const decoder = new PolishVehicleRegistrationCertificateDecoder(session.newlyRecognizedCodes[0].data + " " + session.newlyRecognizedCodes[0].symbology);
+            this.setStore(decoder.data);
+            this.props.navigation.replace('Viewer')
+        });
     }
 
     componentWillMount() {
@@ -62,12 +79,11 @@ class Scanner extends React.Component {
     render() {
         if(Platform.OS === 'ios'){
             const decoder = new PolishVehicleRegistrationCertificateDecoder(tmp)
-            this.setStore(decoder.data)
-            this.props.navigation.pop();
-            //this.props.navigation.navigate('Viewer', {result: decoder.data})
-            this.props.navigation.navigate('Viewer')
+            this.setStore(decoder.data);
+            this.props.navigation.replace('Viewer')
         }
-        return (
+
+        if(!this.state.loading)return (
             <BarcodePicker
                 onScan={(session) => {
                     this.onScan(session)
@@ -79,62 +95,8 @@ class Scanner extends React.Component {
                 style={{flex: 1}}
             />
         );
+        else return <Loading/>
     }
 }
-
-let vehicle = [
-    "markaPojazdu",
-    "modelPojazdu",
-    "numerRejestracyjnyPojazdu",
-    "numerIdentyfikacyjnyPojazdu",
-    //"wariantPojazdu",
-    "wersjaPojazdu",
-    //"typPojazdu",
-    "rokProdukcji",
-    "pojemnoscSilnikaCm3",
-    "maksymalnaMocNettoSilnikaKW",
-    //"masaWlasnaPojazduKg",
-    //"rodzajPojazdu",
-    // "liczbaMiejscSiedzacych",
-    // "liczbaMiejscStojacych",
-    "rodzajPaliwa",
-    // "przeznaczenie",
-    // "dopuszczalnaLadownosc",
-    "dataPierwszejRejestracjiPojazdu",
-];
-let vehicleOwner = [
-    "pelneNazwiskoLubNazwaWlascicielaPojazdu",
-    "imieWlascicielaPojazdu",
-    "nazwiskoWlascicielaPojazdu",
-    "nazwaWlascicielaPojazdu",
-    "numerPESELLubREGONWlascicielaPojazdu",
-    "kodPocztowyWlascicielaPojazdu",
-    "miejscowoscWlascicielaPojazdu",
-    "gminaWlascicielaPojazdu",
-    "ulicaWlascicielaPojazdu",
-    "nrDomuWlascicielaPojazdu",
-    "nrMieszkaniaWlascicielaPojazdu",
-    "phoneNumber",
-    "email"
-];
-
-let documentOwner = [
-    "pelneNazwiskoLubNazwaPosiadaczaDowoduRejestracyjnego",
-    "imiePosiadaczaDowoduRejestracyjnego",
-    "nazwiskoPosiadaczaDowoduRejestracyjnego",
-    "nazwaPosiadaczaDowoduRejestracyjnego",
-    "numerPESELLubREGONPosiadaczaDowoduRejestracyjnego",
-    "kodPocztowyPosiadaczaDowoduRejestracyjnego",
-    "miejscowoscPosiadaczaDowoduRejestracyjnego",
-    "gminaPosiadaczaDowoduRejestracyjnego",
-    "ulicaPosiadaczaDowoduRejestracyjnego",
-    "nrDomuPosiadaczaDowoduRejestracyjnego",
-    "nrMieszkaniaPosiadaczaDowoduRejestracyjnego",
-];
-
-let requireInformation = [
-    "phoneNumber",
-    "email"
-]
 
 export default withNavigation(Scanner)

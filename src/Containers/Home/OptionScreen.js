@@ -4,6 +4,7 @@ import {Button} from "native-base"
 import axios from 'axios'
 
 import withNavigation from "react-navigation/src/views/withNavigation";
+import sessionStore from "../../Stores/dbData/SessionStore";
 
 class OptionScreen extends React.Component {
     constructor(props) {
@@ -12,6 +13,9 @@ class OptionScreen extends React.Component {
 
 
     render() {
+
+        //let http = 'https://mechanicappserver.herokuapp.com/users/logout';
+        let http = 'http://localhost:3000/users/logout'
 
         return (
             <View style={{flex: 1, alignItems: 'center'}}>
@@ -28,7 +32,13 @@ class OptionScreen extends React.Component {
                 </TouchableOpacity>
 
 
-                <Button full onPress={() => axios.get('http://localhost:3000/users/logout').then(() => this.props.navigation.navigate('Login'))}>
+                <Button full onPress={() =>
+                    axios.get(http).then(() => {
+                        sessionStore.setId(null);
+                        this.props.navigation.navigate('Login')
+                    })
+                }
+                        >
                     <Text> Przycisk </Text>
                 </Button>
 

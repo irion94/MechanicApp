@@ -1,30 +1,40 @@
-import axios from "axios";
-import sessionStore from "../Stores/dbData/SessionStore";
-import customerList_Store from "../Stores/dbData/CustomerList_Store";
-import vehicleList_Store from "../Stores/dbData/VehicleList_Store";
-import * as R from "ramda";
-import {Alert} from "react-native";
+import {fetchVehicleData, createVehicle, fetchVehicleInProgress} from './vehicleApi'
+import {fetchOneClientData, createClient, fetchAllClientData} from './clientApi'
+import {login, logout} from './authorization'
+//let http = 'https://mechanicappserver.herokuapp.com';
+//let http = 'http://192.168.55.104:3000';
+let http = 'http://localhost:3000';
+export {
+    fetchVehicleData,
+    createVehicle,
+    fetchVehicleInProgress,
+    fetchOneClientData,
+    fetchAllClientData,
+    createClient,
+    login,
+    logout,
+    http
+}
 
-export const fetchClientData = async () => {
-     await axios.get(`https://mechanicappserver.herokuapp.com/clients/?userId=${sessionStore.userId._id}`)
-    //await axios.get(`http://localhost:3000/clients/?userId=5c7d139e0224c041255aaf38`)
-        .then(result => {
-            customerList_Store.setCustomerArray(result.data);
-            vehicleList_Store.setVehicleArray(
-                R.pipe(
-                    R.map(R.pick(["vehicleList"])),
-                    R.pluck("vehicleList"),
-                    R.flatten
-                )(result.data)
-            )
 
-        })
-        .catch(error => Alert.alert('error' + error));
 
-    console.log('clientArray:', customerList_Store.customerArray);
-    console.log('vehicleArray:', vehicleList_Store.vehicleArray)
-};
 
-export const fetchRepairData = () => {
+// export const createAll = async(client, vehicle) => {
+//     let owner = JSON.stringify(client);
+//     let veh = JSON.stringify(vehicle);
+//     return await axios.post(`${http}/clients/scanner/?client=${owner}&&vehicle=${veh}`)
+//         .then(response => {
+//             return response.data
+//         })
+//         .catch(error => Alert.alert('error' + error));
+// };
 
-};
+
+
+
+
+
+
+
+
+

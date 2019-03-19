@@ -1,5 +1,11 @@
 import * as React from 'react'
-import {createBottomTabNavigator, createStackNavigator, createSwitchNavigator} from 'react-navigation'
+import {
+    createBottomTabNavigator,
+    createStackNavigator,
+    createSwitchNavigator,
+    NavigationActions,
+    StackActions
+} from 'react-navigation'
 import {Icon} from 'react-native-elements';
 import HomeScreen from "../Containers/Home/HomeScreen";
 import OptionScreen from "../Containers/Home/OptionScreen";
@@ -15,6 +21,7 @@ import RepairHistoryScreen from "../Containers/RepairHistory/RepairHistoryScreen
 import Viewer from "../Components/Viewer";
 import Scanner from "../Containers/Create/Scanner";
 import TodoCreator from "../Containers/Create/TodoCreator";
+
 
 export const CustomerStack = createStackNavigator({ //login by customer!!
         Customer: {screen: CustomerScreen},
@@ -42,15 +49,19 @@ export const CustomerStack = createStackNavigator({ //login by customer!!
 //     },
 // );
 
+const resetAction = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({routeName: 'Ve'})],
+});
+
 const HomeStack = createStackNavigator({
         Home: {screen: HomeScreen},
         Option: {screen: OptionScreen},
-        Viewer: {screen: Viewer},
-        TodoCreator: {screen: TodoCreator}
-        // Customer: {screen: CustomerStack_MechanicView}
-        //Todo: {screen: TodoScreen},
-        // TodoDetails: {screen: TodoListItemScreen},
-        // NewRepair: {screen: New_repair},
+        Customer: {screen: CustomerScreen},
+
+        TodoCreator: {screen: TodoCreator},
+        Vehicle: {screen: VehicleScreen},
+        RepairHistory: {screen: RepairHistoryScreen}
     },
     {
         navigationOptions: {
@@ -73,9 +84,10 @@ export const CreateStack = createStackNavigator({
         Create: {screen: Create},
         KeyboardInput: {screen: KeyboardInput},
         Scanner: {screen: Scanner},
+        Viewer: {screen: Viewer},
         Customer: {screen: CustomerScreen},
         Vehicle: {screen: VehicleScreen},
-        RepairHistory: {screen: RepairHistoryScreen}
+        TodoCreator: {screen: TodoCreator}
     },
     {
         navigationOptions: {

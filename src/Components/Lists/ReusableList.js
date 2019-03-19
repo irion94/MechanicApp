@@ -20,7 +20,7 @@ const uuid = require('uuid/v4');
 
 const ReusableList = (props) => {
     let {array, input, objectKeys, arrayLimiter, setFilteredArray, navigateTo, navigateToProps, col} = props;
-    console.log(props)
+    console.log('props', props)
 
     const onResearch = () => {
         let filteredArray;
@@ -28,8 +28,9 @@ const ReusableList = (props) => {
             R.map(R.pick(["key"])),
             R.pluck("key"),
             //R.flatten
-        )(objectKeys)
-        console.log(keys)
+        )(objectKeys);
+
+        //console.log(keys)
         if (arrayLimiter) {
             filteredArray = searchInArray(keys, input, array).slice(0, arrayLimiter);
         }
@@ -43,46 +44,12 @@ const ReusableList = (props) => {
         return filteredArray;
     };
 
-    const onFound = (object) => {
-        return arr[0] === object && input.length > 5 ? {color: 'red'} : {}
-    }
-
     let arr = onResearch();
 
-    // let promise = new Promise(resolve => {
-    //     setTimeout(() => resolve(onResearch()), 3000)
-    // });
-    //
-    // promise.then((x) => console.log(x));
 
     return (
         <List containerStyle={{width: '100%'}}>
-            {/*{*/}
-            {/*map((object) => (*/}
-            {/*<ListItem*/}
-            {/*titleStyle={arr[0] === object && input.length > 5 ? {color: 'red'} : {color: 'black'}}*/}
-            {/*onPress={() => props.navigation.navigate({*/}
-            {/*routeName: navigateTo,*/}
-            {/*params: {...navigateToProps, ...object},*/}
-            {/*key: uuid()*/}
-            {/*}*/}
-            {/*)}*/}
-            {/*titleNumberOfLines={5}*/}
-            {/*key={object.id}*/}
-            {/*title={*/}
-            {/*map( (item) => {*/}
-            {/*return item.label + ':   ' + object[item.key] + '\n'*/}
-            {/*}*/}
-            {/*, objectKeys).join('')*/}
-            {/*}*/}
-            {/*textInputValue={"lol"}*/}
-            {/*/>*/}
-            {/*), input === ''*/}
-            {/*?*/}
-            {/*arrayLimiter ? array.slice(0, arrayLimiter) : array*/}
-            {/*:*/}
-            {/*arr)*/}
-            {/*}*/}
+
             {
                 R.map(object => {
                     return <ListItem
@@ -94,8 +61,6 @@ const ReusableList = (props) => {
                         )}
                         key={object._id}
                         style={[{flex: 1}, arr[0] === object && input.length > 5 ? {backgroundColor: 'rgba(238, 63, 63, 0.21)'} : {}]}
-                        //selected={arr[0] === object && input.length > 5}
-                        //style={arr[0] === object && input.length > 5 ? {backgroundColor: 'red', opacity: 0.5} : {}}
                     >
                         <Body>
                         {

@@ -1,26 +1,61 @@
-import {Item, Label, ListItem, Text} from "native-base";
-import {TextInput} from 'react-native'
+import {Item, Label, ListItem, Text, Button, Icon} from "native-base";
+import {TextInput, TouchableOpacity} from 'react-native'
 import React from "react";
 import PropTypes from 'prop-types'
-import createStore from "../../Stores/Create_store";
+import createStore from "../../Stores/ScannerStore";
 
-const MyListItem = (props) => {
-        let {label, value ,objectKey, storePosition, editable} = props;
-        return (
-            <ListItem itemDivider={true}>
-                <Item fixedLabel>
-                    <Label>{label}</Label>
-                    <TextInput
-                        editable={editable}
-                        style={{minWidth: 150}}
-                        onChangeText={(value) => {
-                            createStore.changePersonalitiesValue(value, storePosition, objectKey);
-                        }}
-                        value={value}
+class MyListItem extends React.Component {
+    // constructor(props){
+    //     super(props);
+    //     this.state = {
+    //         editable: false
+    //     }
+    // }
+    state = {
+        editable: false
+    };
+
+    edit(){
+        if(this.props.edit.editButton){
+            return (
+                <TouchableOpacity
+                    onPress={()=>{
+                        this.setState({editable: !this.state.editable})
+                    }}
+                >
+                    <Icon
+                        type={"AntDesign"}
+                        name={"edit"}
+                        //color={this.state.editable ? "black" : 'blue'}
+                        style={this.state.editable ? {color: 'green'} : {color:'black'}}
                     />
-                </Item>
-            </ListItem>
-        )
+                </TouchableOpacity>
+            )
+        }
+    }
+
+        render(){
+            let {label, value ,objectKey, storePosition, edit} = this.props;
+            return (
+                <ListItem itemDivider={true}>
+                    <Item fixedLabel>
+                        <Label>{label}</Label>
+                        <TextInput
+                            editable={edit.editable ? true : this.state.editable}
+                            style={{minWidth: 150}}
+                            onChangeText={(value) => {
+                                createStore.changePersonalitiesValue(value, storePosition, objectKey);
+                            }}
+                            value={value}
+                        />
+                        {
+                            this.edit()
+                        }
+
+                    </Item>
+                </ListItem>
+            )
+        }
 }
 
 MyListItem.propTypes = {
@@ -28,11 +63,14 @@ MyListItem.propTypes = {
     value: PropTypes.any.isRequired,
     objectKey: PropTypes.number,
     storePosition: PropTypes.string,
-    editable: PropTypes.bool
+    edit: PropTypes.object
 };
 
 MyListItem.defaultProps = {
-    editable: false,
+    edit: {
+        edit: false,
+        editButton: false
+    },
     storePosition: '',
     objectKey: 0
 };

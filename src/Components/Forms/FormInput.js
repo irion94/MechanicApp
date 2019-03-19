@@ -7,7 +7,7 @@ import {Input, Item, Label, View} from "native-base";
 import {Platform} from 'react-native'
 import PropTypes from 'prop-types'
 import ReusablePicker from "../Lists/ReusablePicker";
-import createStore from "../../Stores/Create_store";
+import createStore from "../../Stores/ScannerStore";
 
 @observer
 class FormInput extends React.Component {

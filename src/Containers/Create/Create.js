@@ -4,7 +4,7 @@ import {Body, Button, Card, CardItem, Container, Header, Icon, Left, Right, Text
 import keyboard from 'src/images/keyboard.gif'
 import scan from 'src/images/scan.gif'
 import {applicationColor} from "../../Styles/UniversalStyles";
-import createStore from "../../Stores/Create_store";
+import createStore from "../../Stores/ScannerStore";
 
 export default class Create extends React.Component {
     constructor(props: any) {

@@ -1,22 +1,22 @@
 import * as React from 'react'
 import {Icon} from 'react-native-elements'
-import {ScrollView, StyleSheet, View, StatusBar, TouchableOpacity, Text, Alert} from "react-native";
-import {Header} from 'native-base';
+import {StatusBar, View, Alert} from "react-native";
+import {Container, Header, Text, ListItem, List, Spinner} from 'native-base';
 import {applicationColor} from "../../Styles/UniversalStyles";
 import SearchInput from "../../Components/Forms/SearchInput";
-import {createDatabaseObject} from "../../ObjectGenerator";
-import axios from "axios";
-import customerList_Store from "../../Stores/dbData/CustomerList_Store";
-import sessionStore from 'src/Stores/dbData/SessionStore'
-import * as R from 'ramda'
-import vehicleList_Store from "../../Stores/dbData/VehicleList_Store";
+import vehicleStore from "../../Stores/dbData/VehicleStore";
+import customerStore from "../../Stores/dbData/CustomerStore";
+import ReusableList from "../../Components/Lists/ReusableList";
+import {fetchVehicleInProgress} from "../../api/ApiUtils";
+import TodoList from "../../Components/Lists/TodoList";
 
 class HomeScreen extends React.Component <State, Props> {
     constructor(props) {
         super(props);
         this.state = {
             input: '',
-            token: null
+            token: null,
+            loading: true
         };
     }
 
@@ -55,49 +55,63 @@ class HomeScreen extends React.Component <State, Props> {
         })
     }
 
+    async componentWillMount(){
+        this.setState({loading:true});
+        fetchVehicleInProgress()
+            .then((result) => vehicleStore.setVehicleInProgress(result))
+            .then(() => this.setState({loading:false}))
+            .catch(error => Alert.alert('VehicleInProgressFail', error));
+    }
+
+
     render() {
-        console.log('props', sessionStore.userId)
+        //let http = 'http://localhost:3000';
+        // axios.get(`${http}/clients/?userId=${sessionStore.userId._id}`)
+        //     .then( response => vehicleList_Store.getRepairLists(response.data))
+        //     .then( res => console.log(res))
 
+        //fetchVehicleWithRepairs(vehicleList_Store.getRepairLists()).then( () => console.log( vehicleList_Store.setVehicleWithRepairs()))
 
-        // get clients by userId, map client vehicles -> setStore
-        // axios.get(`http://localhost:3000/clients/?userId=${sessionStore.userId._id}`)
-        //     .then(result => customerList_Store.setCustomerArray(result.data))
-        //     .then(() => vehicleList_Store.setVehicleArray(
-        //         R.pipe(
-        //             R.map(R.pick(["vehicleList"])),
-        //             R.pluck("vehicleList"),
-        //             R.map(item => item.pop())
-        //         )(customerList_Store.getCustomerArray())))
-        //     .then(() => console.log(vehicleList_Store.vehicleArray))
-        //     .catch(error => Alert.alert('error' + error));
+        //console.log(vehicleList_Store.getRepairLists());
+        //console.log('props', sessionStore.userId)
 
+        //createDatabaseObject();
+        //console.log(vehicleStore.getVehicleArray());
+        console.log('vehicleInProgress:',vehicleStore.vehicleInProgress);
 
-        // axios.get(`http://localhost:3000/vehicles/`)
-        //     .then( result => vehicleList_Store.setVehicleArray(result.data))
-        //     .catch(error => Alert.alert('error'+error))
-        //     .then(() => console.log(vehicleList_Store.getVehicleArray()))
+        console.log(JSON.stringify([{userId:"5c7d139e0224c041255aaf38"}, {vehicleList:"5c7d14d10224c041255aaf41"}]));
 
-        // axios.get(`http://localhost:3000/clients/?userId=${sessionStore.userId._id}`)
-        //     .then(result => vehicleList_Store.setVehicleArray(result.data))
-        //     .catch(error => Alert.alert('error' + error))
-        //     .then(() => console.log(vehicleList_Store.getVehicleArray()))
+        let t = this;
 
+        if (!t.state.loading)
+            return (
+                <View style={{flex: 1, backgroundColor: 'white'}}>
+                    <StatusBar hidden/>
+                    <Container>
 
-        //console.log(customerList_Store.getCustomerArray())
+                        {/*<FlatList*/}
+                        {/*data={vehicleStore.vehicleInProgress}*/}
+                        {/*renderItem={({item}) =>*/}
+                        {/*<Text>{item.markaPojazdu}</Text>*/}
+                        {/*}*/}
+                        {/*/>*/}
+                        <TodoList
+                            navigation={this.props.navigation}
+                            props={this.props} from={'HomeScreen'}
+                            input={this.state}
+                        />
 
-        createDatabaseObject();
-
-        return (
-            <View style={{flex: 1, backgroundColor: 'white'}}>
-                <StatusBar hidden/>
-
-
-                {/*<VehiclesListTodo navigation={this.props.navigation} props={this.props} from={'HomeScreen'}*/}
-                {/*input={this.state}/>*/}
-
-                {/*<FloatButton active={false}/>*/}
-            </View>
-        )
+                    </Container>
+                    {/*<FloatButton active={false}/>*/}
+                </View>
+            )
+        else{
+            return(
+                <Container style={{alignItems: 'center', justifyContent: 'center', flex: 1}}>
+                    <Spinner color={'black'}/>
+                </Container>
+            )
+        }
     }
 }
 

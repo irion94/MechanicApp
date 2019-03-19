@@ -1,5 +1,5 @@
 import {action, observable} from "mobx";
-import vehicleList_Store from "./dbData/VehicleList_Store";
+import vehicleStore from "./dbData/VehicleStore";
 
 
 //TODO: To delete!
@@ -13,7 +13,7 @@ class SelectedCustomer_Store {
     };
 
     @action setCustomersVehicles = () => {
-        this.customersVehicles = vehicleList_Store.getVehicleArray().slice(0,3)
+        this.customersVehicles = vehicleStore.getVehicleArray().slice(0,3)
     };
 
 }

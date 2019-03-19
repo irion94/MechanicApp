@@ -1,12 +1,17 @@
 import {action, observable} from "mobx";
-import {loadRandomCarList} from "../../ObjectGenerator";
 
-class VehicleList_Store {
+
+class VehicleStore {
     @observable vehicleArray = [{}];
     @observable filteredArray = [{}];
+    @observable vehicleInProgress = [{}];
 
     @action setVehicleArray = (input) => {
         this.vehicleArray = input;
+    };
+
+    @action setVehicleInProgress = (input) => {
+        this.vehicleInProgress = input;
     };
 
     @action setFilteredArray = (input) => {
@@ -23,5 +28,5 @@ class VehicleList_Store {
 
 }
 
-let vehicleList_Store = new VehicleList_Store();
-export default vehicleList_Store;
+let vehicleStore = new VehicleStore();
+export default vehicleStore;
